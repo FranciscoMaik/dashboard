@@ -1,0 +1,150 @@
+"use client";
+
+import { Wallet } from "lucide-react";
+import { useState } from "react";
+import {
+  AssetClassCards,
+  type AssetType,
+} from "@/components/investments/asset-class-cards";
+import { type Asset, AssetTable } from "@/components/investments/asset-table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+// Mock Data
+const mockAssets: Asset[] = [
+  // Fixed Income
+  {
+    id: "1",
+    type: "fixed",
+    name: "Treasury Bond 2026",
+    maturity: "2026-05-15",
+    grossValue: 10500,
+    netValue: 10250,
+  },
+  {
+    id: "2",
+    type: "fixed",
+    name: "CDB Bank X",
+    maturity: "2025-12-01",
+    grossValue: 5200,
+    netValue: 5100,
+  },
+  // Variable
+  {
+    id: "3",
+    type: "variable",
+    ticker: "AAPL",
+    sector: "Technology",
+    quantity: 50,
+    totalValue: 8750,
+  },
+  {
+    id: "4",
+    type: "variable",
+    ticker: "MSFT",
+    sector: "Technology",
+    quantity: 30,
+    totalValue: 12400,
+  },
+  {
+    id: "5",
+    type: "variable",
+    ticker: "KO",
+    sector: "Consumer",
+    quantity: 100,
+    totalValue: 5800,
+  },
+  // REITs
+  {
+    id: "6",
+    type: "reits",
+    ticker: "HGLG11",
+    sector: "Logistics",
+    quantity: 200,
+    totalValue: 32000,
+  },
+  {
+    id: "7",
+    type: "reits",
+    ticker: "KNIP11",
+    sector: "Paper",
+    quantity: 150,
+    totalValue: 14500,
+  },
+];
+
+export default function ClientInvestmentsPage() {
+  const [selectedType, setSelectedType] = useState<AssetType | null>(null);
+
+  const calculateTotal = (type: AssetType) => {
+    return (
+      mockAssets
+        .filter((a) => a.type === type)
+        // Use netValue for fixed, totalValue for others
+        .reduce(
+          (sum, a) =>
+            sum + (a.type === "fixed" ? a.netValue || 0 : a.totalValue || 0),
+          0,
+        )
+    );
+  };
+
+  const fixedTotal = calculateTotal("fixed");
+  const variableTotal = calculateTotal("variable");
+  const reitsTotal = calculateTotal("reits");
+  const grandTotal = fixedTotal + variableTotal + reitsTotal;
+
+  return (
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
+        <h2 className="text-3xl font-bold tracking-tight">Investments</h2>
+      </div>
+
+      {/* Total Equity Summary */}
+      <Card className="bg-primary text-primary-foreground border-none">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium opacity-90">
+            Total Equity
+          </CardTitle>
+          <Wallet className="h-4 w-4 opacity-70" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-4xl font-bold">
+            ${grandTotal.toLocaleString()}
+          </div>
+          <p className="text-xs opacity-70 mt-1">
+            Consolidated view of all connected accounts + manual entries.
+          </p>
+        </CardContent>
+      </Card>
+
+      <div className="space-y-4">
+        <h3 className="text-xl font-semibold">Allocation</h3>
+        <AssetClassCards
+          fixedTotal={fixedTotal}
+          variableTotal={variableTotal}
+          reitsTotal={reitsTotal}
+          selected={selectedType}
+          onSelect={setSelectedType}
+        />
+      </div>
+
+      {/* Dynamic Table Section */}
+      {selectedType && (
+        <div
+          key={selectedType}
+          className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500"
+        >
+          <div className="flex items-center justify-between">
+            <h3 className="text-xl font-semibold capitalize">
+              {selectedType === "reits"
+                ? "Real Estate Funds"
+                : `${selectedType} Income`}{" "}
+              Details
+            </h3>
+          </div>
+          <AssetTable type={selectedType} assets={mockAssets} />
+        </div>
+      )}
+    </div>
+  );
+}
