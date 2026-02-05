@@ -98,3 +98,38 @@ export const getClientData = (id: string) => {
         : [],
   };
 };
+
+export interface Transaction {
+  id: string;
+  date: string;
+  name: string;
+  amount: number;
+  type: "income" | "expense";
+  category: string;
+  subcategory: string;
+  ignored: boolean;
+}
+
+export const getTransactions = (clientId: string): Transaction[] => {
+  // Generate some mock transactions
+  return Array.from({ length: 50 }).map((_, i) => {
+    const isExpense = Math.random() > 0.3;
+    const amount = isExpense
+      ? Math.floor(Math.random() * 500) + 50
+      : Math.floor(Math.random() * 5000) + 2000;
+
+    const date = new Date();
+    date.setDate(date.getDate() - Math.floor(Math.random() * 90)); // Last 90 days
+
+    return {
+      id: `trans_${i}`,
+      date: date.toISOString().split("T")[0],
+      name: isExpense ? `Compra ${i}` : `Salário/Renda ${i}`,
+      amount,
+      type: isExpense ? "expense" : "income",
+      category: isExpense ? "Alimentação" : "Renda",
+      subcategory: isExpense ? "Mercado" : "Salário",
+      ignored: Math.random() > 0.95, // 5% ignored
+    };
+  });
+};

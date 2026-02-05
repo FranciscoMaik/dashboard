@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight, Search } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,9 +14,26 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function TransactionNavigator() {
+interface TransactionNavigatorProps {
+  clientId: string;
+  period: string;
+}
+
+export function TransactionNavigator({
+  clientId,
+  period,
+}: TransactionNavigatorProps) {
   const [category, setCategory] = useState<string>("");
   const [subcategory, setSubcategory] = useState<string>("");
+
+  const queryParams = new URLSearchParams({
+    period: period,
+  });
+
+  if (category) queryParams.set("category", category);
+  if (subcategory) queryParams.set("subcategory", subcategory);
+
+  const href = `/dashboard/clients/${clientId}/transactions?${queryParams.toString()}`;
 
   return (
     <Card>
@@ -54,8 +72,10 @@ export function TransactionNavigator() {
           </Select>
         </div>
 
-        <Button className="w-full sm:w-auto" disabled={!category}>
-          Ver Transações <ArrowRight className="ml-2 h-4 w-4" />
+        <Button className="w-full sm:w-auto" asChild>
+          <Link href={href}>
+            Ver Transações <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
         </Button>
       </CardContent>
     </Card>

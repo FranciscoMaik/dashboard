@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { AnalyticsSummary } from "@/components/analytics/analytics-summary";
@@ -102,8 +103,12 @@ export default function ClientAnalysisPage() {
             selected={selectedPeriod}
             onSelect={setSelectedPeriod}
           />
-          <Button variant="outline">
-            Open Finance <ArrowUpRight className="ml-2 h-4 w-4" />
+          <Button variant="outline" asChild>
+            <Link
+              href={`/dashboard/clients/${params.id}/transactions?period=${selectedPeriod}`}
+            >
+              Open Finance <ArrowUpRight className="ml-2 h-4 w-4" />
+            </Link>
           </Button>
         </div>
       </div>
@@ -128,7 +133,10 @@ export default function ClientAnalysisPage() {
         </div>
 
         {/* Transaction Drill-down */}
-        <TransactionNavigator />
+        <TransactionNavigator
+          clientId={params.id as string}
+          period={selectedPeriod}
+        />
       </div>
     </div>
   );
