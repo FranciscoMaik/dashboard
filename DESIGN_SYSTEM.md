@@ -2,10 +2,10 @@
 
 ## Typography
 
-**Font Family**: Inter (Sans Serif)
+**Font Family**: Manrope (Sans Serif)
 **Usage**: Used for all text elements.
 
-- **Variable**: `--font-inter`
+- **Variable**: `--font-manrope`
 - **Tailwind Class**: `font-sans`
 
 ## Spacing
