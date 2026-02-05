@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatCurrency, formatDate } from "@/lib/formatters";
 import type { AssetType } from "./asset-class-cards";
 
 export interface Asset {
@@ -47,12 +48,14 @@ export function AssetTable({ type, assets }: AssetTableProps) {
             {filteredAssets.map((asset) => (
               <TableRow key={asset.id}>
                 <TableCell className="font-medium">{asset.name}</TableCell>
-                <TableCell>{asset.maturity}</TableCell>
+                <TableCell>
+                  {asset.maturity ? formatDate(asset.maturity) : "-"}
+                </TableCell>
                 <TableCell className="text-right">
-                  ${asset.grossValue?.toLocaleString()}
+                  {formatCurrency(asset.grossValue || 0)}
                 </TableCell>
                 <TableCell className="text-right font-bold text-green-600 dark:text-green-400">
-                  ${asset.netValue?.toLocaleString()}
+                  {formatCurrency(asset.netValue || 0)}
                 </TableCell>
               </TableRow>
             ))}
@@ -91,7 +94,7 @@ export function AssetTable({ type, assets }: AssetTableProps) {
               <TableCell>{asset.sector}</TableCell>
               <TableCell className="text-right">{asset.quantity}</TableCell>
               <TableCell className="text-right font-bold text-green-600 dark:text-green-400">
-                ${asset.totalValue?.toLocaleString()}
+                {formatCurrency(asset.totalValue || 0)}
               </TableCell>
             </TableRow>
           ))}

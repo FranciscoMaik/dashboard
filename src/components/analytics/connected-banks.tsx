@@ -18,9 +18,9 @@ export function ConnectedBanks({ banks }: ConnectedBanksProps) {
     switch (type) {
       case "Digital":
         return <Smartphone className="h-4 w-4 text-purple-500" />;
-      case "Traditional":
+      case "Tradicional":
         return <Landmark className="h-4 w-4 text-orange-500" />;
-      case "Investment":
+      case "Investimento":
         return <Building2 className="h-4 w-4 text-blue-500" />;
       default:
         return <Landmark className="h-4 w-4" />;

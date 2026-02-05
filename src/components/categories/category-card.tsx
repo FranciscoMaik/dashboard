@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Progress } from "@/components/ui/progress";
+import { formatCurrency } from "@/lib/formatters";
 
 interface Subcategory {
   id: string;
@@ -70,8 +71,8 @@ export function CategoryCard({
           </div>
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground mr-2">
-              <strong>${category.spent.toLocaleString()}</strong> / $
-              {category.limit.toLocaleString()}
+              <strong>{formatCurrency(category.spent)}</strong> /{" "}
+              {formatCurrency(category.limit)}
             </span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -127,7 +128,7 @@ export function CategoryCard({
                     <span className="text-sm font-medium">{sub.name}</span>
                     <div className="flex items-center gap-4">
                       <span className="text-sm text-muted-foreground">
-                        ${sub.spent.toLocaleString()}
+                        {formatCurrency(sub.spent)}
                       </span>
                       <div className="flex gap-1">
                         <Button

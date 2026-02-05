@@ -56,24 +56,24 @@ const MOCK_SUMMARY = {
 
 const MOCK_EVOLUTION = [
   { name: "Jan", revenue: 14000, expenses: 9000, balance: 5000 },
-  { name: "Feb", revenue: 15000, expenses: 11000, balance: 4000 },
+  { name: "Fev", revenue: 15000, expenses: 11000, balance: 4000 },
   { name: "Mar", revenue: 13500, expenses: 9500, balance: 4000 },
-  { name: "Apr", revenue: 16000, expenses: 12000, balance: 4000 },
-  { name: "May", revenue: 14500, expenses: 10500, balance: 4000 },
+  { name: "Abr", revenue: 16000, expenses: 12000, balance: 4000 },
+  { name: "Mai", revenue: 14500, expenses: 10500, balance: 4000 },
   { name: "Jun", revenue: 18000, expenses: 11500, balance: 6500 },
 ];
 
 const MOCK_TOP_EXPENSES = [
-  { name: "Housing", value: 4500 },
-  { name: "Food", value: 2800 },
-  { name: "Transport", value: 1500 },
-  { name: "Leisure", value: 1200 },
-  { name: "Shopping", value: 950 },
-  { name: "Health", value: 800 },
-  { name: "Utilities", value: 650 },
-  { name: "Education", value: 500 },
+  { name: "Habitação", value: 4500 },
+  { name: "Alimentação", value: 2800 },
+  { name: "Transporte", value: 1500 },
+  { name: "Lazer", value: 1200 },
+  { name: "Compras", value: 950 },
+  { name: "Saúde", value: 800 },
+  { name: "Utilidades", value: 650 },
+  { name: "Educação", value: 500 },
   { name: "Pets", value: 300 },
-  { name: "Others", value: 200 },
+  { name: "Outros", value: 200 },
 ];
 
 export default function ClientAnalysisPage() {
@@ -94,7 +94,7 @@ export default function ClientAnalysisPage() {
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <h2 className="text-3xl font-bold tracking-tight">
-          Financial Analysis
+          Análise Financeira
         </h2>
 
         <div className="flex items-center gap-4">

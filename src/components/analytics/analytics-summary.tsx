@@ -8,6 +8,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 // import { cn } from "@/lib/utils"; // Unused
+import { formatCurrency } from "@/lib/formatters";
 
 interface AnalyticsSummaryProps {
   revenues: number;
@@ -33,7 +34,7 @@ export function AnalyticsSummary({
         </CardHeader>
         <CardContent>
           <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400">
-            +${revenues.toLocaleString()}
+            +{formatCurrency(revenues)}
           </div>
         </CardContent>
       </Card>
@@ -45,7 +46,7 @@ export function AnalyticsSummary({
         </CardHeader>
         <CardContent>
           <div className="text-xl font-bold text-red-600 dark:text-red-400">
-            -${expenses.toLocaleString()}
+            -{formatCurrency(expenses)}
           </div>
         </CardContent>
       </Card>
@@ -58,7 +59,7 @@ export function AnalyticsSummary({
           <Wallet className="h-4 w-4 opacity-70" />
         </CardHeader>
         <CardContent>
-          <div className="text-xl font-bold">${balance.toLocaleString()}</div>
+          <div className="text-xl font-bold">{formatCurrency(balance)}</div>
         </CardContent>
       </Card>
 
@@ -69,7 +70,7 @@ export function AnalyticsSummary({
         </CardHeader>
         <CardContent>
           <div className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            ${deposits.toLocaleString()}
+            {formatCurrency(deposits)}
           </div>
         </CardContent>
       </Card>
@@ -81,7 +82,7 @@ export function AnalyticsSummary({
         </CardHeader>
         <CardContent>
           <div className="text-xl font-bold text-orange-600 dark:text-orange-400">
-            -${withdrawals.toLocaleString()}
+            -{formatCurrency(withdrawals)}
           </div>
         </CardContent>
       </Card>

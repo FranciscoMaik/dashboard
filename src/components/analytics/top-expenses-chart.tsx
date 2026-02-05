@@ -11,6 +11,7 @@ import {
   YAxis,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/formatters";
 
 interface CategoryData {
   name: string;
@@ -76,7 +77,7 @@ export function TopExpensesChart({ data }: TopExpensesChartProps) {
                   borderRadius: "var(--radius)",
                 }}
                 formatter={(value: number | undefined) =>
-                  `$${(value || 0).toLocaleString()}`
+                  formatCurrency(value || 0)
                 }
               />
               <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={20}>

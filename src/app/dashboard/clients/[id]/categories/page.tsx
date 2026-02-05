@@ -75,13 +75,13 @@ export default function ClientCategoriesPage() {
   };
 
   const handleDeleteCategory = (categoryId: string) => {
-    if (confirm("Are you sure you want to delete this category?")) {
+    if (confirm("Tem certeza que deseja excluir esta categoria?")) {
       setCategories((prev) => prev.filter((c) => c.id !== categoryId));
     }
   };
 
   const handleDeleteSubcategory = (categoryId: string, subId: string) => {
-    if (confirm("Are you sure you want to delete this subcategory?")) {
+    if (confirm("Tem certeza que deseja excluir esta subcategoria?")) {
       setCategories((prev) =>
         prev.map((c) => {
           if (c.id === categoryId) {
@@ -155,13 +155,13 @@ export default function ClientCategoriesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Categories</h2>
+          <h2 className="text-3xl font-bold tracking-tight">Categorias</h2>
           <p className="text-muted-foreground">
-            Manage spending limits and usage.
+            Gerencie limites de gastos e uso.
           </p>
         </div>
         <Button onClick={handleCreateCategory}>
-          <Plus className="mr-2 h-4 w-4" /> Add Category
+          <Plus className="mr-2 h-4 w-4" /> Adicionar Categoria
         </Button>
       </div>
 
@@ -180,7 +180,7 @@ export default function ClientCategoriesPage() {
 
         {categories.length === 0 && (
           <div className="text-center py-12 text-muted-foreground border rounded-lg border-dashed">
-            No categories found. Create one to get started.
+            Nenhuma categoria encontrada. Crie uma para começar.
           </div>
         )}
       </div>

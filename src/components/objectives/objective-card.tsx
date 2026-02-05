@@ -1,3 +1,4 @@
+import { differenceInMonths } from "date-fns";
 import {
   Calendar,
   Car,
@@ -10,6 +11,7 @@ import {
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatCurrency, formatDate } from "@/lib/formatters";
 
 export type ObjectiveType = "short" | "medium" | "long";
 
@@ -123,7 +125,7 @@ export function ObjectiveCard({
               </Pie>
               <Tooltip
                 formatter={(value: number | undefined) => [
-                  `$${(value || 0).toLocaleString()}`,
+                  formatCurrency(value || 0),
                   "Valor",
                 ]}
                 contentStyle={{
@@ -140,20 +142,30 @@ export function ObjectiveCard({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div className="flex flex-col gap-1">
+        <div className="grid grid-cols-3 gap-4 text-sm items-center">
+          <div className="flex flex-col gap-1 items-center">
             <span className="text-muted-foreground flex items-center gap-1">
               <Calendar className="h-3 w-3" /> Início
             </span>
-            <span className="font-medium">{objective.startDate}</span>
+            <span className="font-medium">
+              {formatDate(objective.startDate)}
+            </span>
           </div>
-          <div className="flex flex-col gap-1">
+
+          <div className="flex flex-col gap-1 items-center">
             <span className="text-muted-foreground flex items-center gap-1">
               <Calendar className="h-3 w-3" /> Fim
             </span>
-            <span className="font-medium">{objective.endDate}</span>
-            <span className="text-xs text-muted-foreground">
-              ({monthsRemaining} meses restantes)
+            <span className="font-medium">{formatDate(objective.endDate)}</span>
+          </div>
+
+          <div className="flex flex-col gap-1 items-center">
+            <span className="text-muted-foreground flex items-center gap-1">
+              <Calendar className="h-3 w-3" /> Meses restantes
+            </span>
+            <span className="font-medium">
+              {differenceInMonths(new Date(objective.endDate), new Date())}{" "}
+              meses
             </span>
           </div>
         </div>
@@ -168,13 +180,13 @@ export function ObjectiveCard({
               <span className="text-muted-foreground">Atual:</span>
             </div>
             <span className="font-semibold">
-              ${objective.currentAmount.toLocaleString()}
+              {formatCurrency(objective.currentAmount)}
             </span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Mensal:</span>
             <span className="font-semibold text-green-600 dark:text-green-400">
-              ${objective.monthlyContribution.toLocaleString()}
+              {formatCurrency(objective.monthlyContribution)}
             </span>
           </div>
           <div className="flex justify-between text-sm items-center">
@@ -183,7 +195,7 @@ export function ObjectiveCard({
               <span className="text-muted-foreground">Meta:</span>
             </div>
             <span className="font-bold text-primary">
-              ${objective.totalValue.toLocaleString()}
+              {formatCurrency(objective.totalValue)}
             </span>
           </div>
         </div>

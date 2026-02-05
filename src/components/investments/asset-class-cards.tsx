@@ -1,5 +1,6 @@
 import { Building2, Landmark, TrendingUp } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/utils";
 
 export type AssetType = "fixed" | "variable" | "reits";
@@ -33,9 +34,7 @@ export function AssetClassCards({
           <Landmark className="h-4 w-4 text-blue-500" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
-            ${fixedTotal.toLocaleString()}
-          </div>
+          <div className="text-2xl font-bold">{formatCurrency(fixedTotal)}</div>
           <p className="text-xs text-muted-foreground">
             Tesouro, CDBs, Debêntures
           </p>
@@ -55,7 +54,7 @@ export function AssetClassCards({
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            ${variableTotal.toLocaleString()}
+            {formatCurrency(variableTotal)}
           </div>
           <p className="text-xs text-muted-foreground">Ações, ETFs, Opções</p>
         </CardContent>
@@ -75,9 +74,7 @@ export function AssetClassCards({
           <Building2 className="h-4 w-4 text-indigo-500" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
-            ${reitsTotal.toLocaleString()}
-          </div>
+          <div className="text-2xl font-bold">{formatCurrency(reitsTotal)}</div>
           <p className="text-xs text-muted-foreground">FIIs</p>
         </CardContent>
       </Card>

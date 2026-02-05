@@ -11,6 +11,7 @@ import {
   YAxis,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/formatters";
 
 interface EvolutionData {
   name: string; // Period name (e.g. Month)
@@ -58,7 +59,7 @@ export function EvolutionChart({ data }: EvolutionChartProps) {
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
-                tickFormatter={(value) => `$${value}`}
+                tickFormatter={(value) => formatCurrency(value)}
               />
               <Tooltip
                 contentStyle={{

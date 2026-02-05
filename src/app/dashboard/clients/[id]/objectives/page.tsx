@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 const mockObjectives: Objective[] = [
   {
     id: "1",
-    name: "Emergency Fund",
+    name: "Reserva de Emergência",
     type: "short",
     startDate: "2024-01-01",
     endDate: "2024-12-31",
@@ -24,7 +24,7 @@ const mockObjectives: Objective[] = [
   },
   {
     id: "2",
-    name: "New Car",
+    name: "Carro Novo",
     type: "medium",
     startDate: "2024-06-01",
     endDate: "2026-06-01",
@@ -35,7 +35,7 @@ const mockObjectives: Objective[] = [
   },
   {
     id: "3",
-    name: "Retirement",
+    name: "Aposentadoria",
     type: "long",
     startDate: "2024-01-01",
     endDate: "2050-01-01",
@@ -64,7 +64,7 @@ export default function ClientObjectivesPage() {
   };
 
   const handleDelete = (objective: Objective) => {
-    if (confirm(`Are you sure you want to delete "${objective.name}"?`)) {
+    if (confirm(`Tem certeza que deseja excluir "${objective.name}"?`)) {
       setObjectives((prev) => prev.filter((o) => o.id !== objective.id));
     }
   };
@@ -76,16 +76,16 @@ export default function ClientObjectivesPage() {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold tracking-tight">Objectives</h2>
+        <h2 className="text-3xl font-bold tracking-tight">Objetivos</h2>
         <Button onClick={handleCreate} className="gap-2">
-          <Plus className="h-4 w-4" /> New Objective
+          <Plus className="h-4 w-4" /> Novo Objetivo
         </Button>
       </div>
 
       {/* Short Term */}
       <section className="space-y-4">
         <h3 className="text-xl font-semibold border-b pb-2">
-          Short Term (0-2 Years)
+          Curto Prazo (0-2 Anos)
         </h3>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {shortTerm.map((obj) => (
@@ -98,7 +98,7 @@ export default function ClientObjectivesPage() {
           ))}
           {shortTerm.length === 0 && (
             <p className="text-muted-foreground text-sm">
-              No short term objectives.
+              Nenhum objetivo de curto prazo.
             </p>
           )}
         </div>
@@ -107,7 +107,7 @@ export default function ClientObjectivesPage() {
       {/* Medium Term */}
       <section className="space-y-4">
         <h3 className="text-xl font-semibold border-b pb-2">
-          Medium Term (2-5 Years)
+          Médio Prazo (2-5 Anos)
         </h3>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {mediumTerm.map((obj) => (
@@ -120,7 +120,7 @@ export default function ClientObjectivesPage() {
           ))}
           {mediumTerm.length === 0 && (
             <p className="text-muted-foreground text-sm">
-              No medium term objectives.
+              Nenhum objetivo de médio prazo.
             </p>
           )}
         </div>
@@ -129,7 +129,7 @@ export default function ClientObjectivesPage() {
       {/* Long Term */}
       <section className="space-y-4">
         <h3 className="text-xl font-semibold border-b pb-2">
-          Long Term (5+ Years)
+          Longo Prazo (5+ Anos)
         </h3>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {longTerm.map((obj) => (
@@ -142,7 +142,7 @@ export default function ClientObjectivesPage() {
           ))}
           {longTerm.length === 0 && (
             <p className="text-muted-foreground text-sm">
-              No long term objectives.
+              Nenhum objetivo de longo prazo.
             </p>
           )}
         </div>
