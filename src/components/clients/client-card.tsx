@@ -59,7 +59,7 @@ export function ClientCard({
           <Phone className="h-4 w-4" />
           <span>{phone}</span>
         </div>
-        <div className="flex gap-1 mt-4 w-full align-center justify-end">
+        <div className="flex gap-1 mt-4 w-full align-center justify-end min-h-[25px]">
           {hasOpenFinance && (
             <Badge className="bg-blue-400 border-transparent text-white">
               Open Finance
