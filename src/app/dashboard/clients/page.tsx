@@ -3,6 +3,7 @@
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { ClientCard } from "@/components/clients/client-card";
+import { ExportClientsDialog } from "@/components/clients/export-clients-dialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -87,6 +88,7 @@ export default function ClientsPage() {
               <SelectItem value="name-desc">Nome (Z-A)</SelectItem>
             </SelectContent>
           </Select>
+          <ExportClientsDialog clients={filteredClients} />
         </div>
       </div>
 
