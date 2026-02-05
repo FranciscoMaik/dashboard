@@ -27,12 +27,16 @@ Tailwind's default spacing scale works perfectly for this:
 
 ## Colors
 
-The color palette is defined in `globals.css` using CSS variables and OKLCH color space for modern color manipulation.
+The color palette includes the following core colors:
 
-### Core Colors
-- **Primary**: Brand primary color.
-- **Secondary**: Secondary actions/accents.
-- **Background/Foreground**: App structure colors.
+### Brand Colors
+- **Primary**: `#1d63dd`
+- **Secondary**: `#0890F2`
+- **Dark Background**: `#001833`
+- **Dark Card**: `#0d2c63`
+
+### UI Colors
+- **Foreground**: App structure colors.
 - **Muted**: For de-emphasized text or backgrounds.
 
 ### Usage

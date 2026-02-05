@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 
 import { BalanceChart } from "@/components/clients/balance-chart";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -36,7 +37,20 @@ export default async function ClientProfilePage({
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">{client.name}</h2>
+        <div className="flex items-center gap-4">
+          <Avatar size="lg" className="h-16 w-16">
+            <AvatarImage src="" />
+            <AvatarFallback className="text-xl">
+              {client.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")
+                .substring(0, 2)
+                .toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <h2 className="text-3xl font-bold tracking-tight">{client.name}</h2>
+        </div>
         <div className="flex gap-2">
           {client.hasOpenFinance && (
             <Badge variant="secondary" className="text-lg py-1">

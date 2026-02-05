@@ -144,12 +144,13 @@ export function Sidebar() {
             const Icon = item.icon;
             const isActive = pathname === item.href;
             return (
-              <Link key={index} href={item.href}>
+              <Link key={item.href} href={item.href}>
                 <Button
                   variant={isActive ? "secondary" : "ghost"}
                   className={cn(
                     "w-full justify-start gap-2",
-                    isActive && "bg-secondary",
+                    isActive &&
+                      "bg-secondary text-white hover:bg-secondary/90 hover:text-white",
                     isCollapsed && "justify-center px-2",
                   )}
                   title={isCollapsed ? item.title : undefined}

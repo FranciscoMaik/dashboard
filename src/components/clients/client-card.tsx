@@ -1,5 +1,6 @@
 import { ChevronRight, Mail, Phone } from "lucide-react";
 import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,15 +34,19 @@ export function ClientCard({
     <Card className="hover:shadow-md transition-shadow">
       <CardHeader>
         <div className="flex justify-between items-start">
-          <CardTitle className="text-lg">{name}</CardTitle>
-          <div className="flex gap-1">
-            {hasOpenFinance && <Badge variant="secondary">Open Finance</Badge>}
-            {hasB3 && <Badge variant="outline">B3</Badge>}
-            {hasLifePlan && (
-              <Badge className="bg-indigo-600 hover:bg-indigo-700 border-transparent text-white">
-                Plano de Vida
-              </Badge>
-            )}
+          <div className="flex items-center gap-3">
+            <Avatar>
+              <AvatarImage src="" />
+              <AvatarFallback>
+                {name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")
+                  .substring(0, 2)
+                  .toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <CardTitle className="text-lg">{name}</CardTitle>
           </div>
         </div>
       </CardHeader>
@@ -53,6 +58,23 @@ export function ClientCard({
         <div className="flex items-center gap-2">
           <Phone className="h-4 w-4" />
           <span>{phone}</span>
+        </div>
+        <div className="flex gap-1 mt-4 w-full align-center justify-end">
+          {hasOpenFinance && (
+            <Badge className="bg-blue-400 border-transparent text-white">
+              Open Finance
+            </Badge>
+          )}
+          {hasB3 && (
+            <Badge className="bg-green-500 border-transparent text-white">
+              B3
+            </Badge>
+          )}
+          {hasLifePlan && (
+            <Badge className="bg-indigo-600 border-transparent text-white">
+              Life Plan
+            </Badge>
+          )}
         </div>
       </CardContent>
       <CardFooter>
