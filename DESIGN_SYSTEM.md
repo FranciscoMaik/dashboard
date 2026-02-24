@@ -26,7 +26,7 @@ O Mundo Invest Dashboard transforma a rigidez dos relatórios financeiros em uma
 
 ## Referências e Princípios
 - **Linear:** A obsessão pela clareza geométrica, ícones de traços precisos e interfaces que parecem "afiadas". → Princípio: Redução de ruído. Só o que importa ganha contorno. → Aplicação: Bordas subtis de 1px, sem backgrounds pesados para cards, muita área de respiro.
-- **Vercel:** Tipografia soberana e hierarquia definida por contrastes de cinzas. → Princípio: A ausência de cor cria foco. Quando a cor aparece, ela guia o olhar. → Aplicação: Todo o dashboard é em escala de cinzas e branco puro; a cor principal (Indigo) é usada apenas onde há "vitória" (lucro, meta alcançada) ou ação.
+- **Vercel:** Tipografia soberana e hierarquia definida por contrastes de cinzas. → Princípio: A ausência de cor cria foco. Quando a cor aparece, ela guia o olhar. → Aplicação: Todo o dashboard é em escala de cinzas e branco puro; a cor principal (Blue #1d63dd) é usada apenas onde há "vitória" (lucro, meta alcançada) ou ação.
 
 ---
 
@@ -121,12 +121,12 @@ O Mundo Invest Dashboard transforma a rigidez dos relatórios financeiros em uma
 | `text-muted` | `#A1A1AA` (Zinc 400) | Labels minúsculas de eixos X/Y, ou hint interativo vazio. |
 
 ### Cores — Accent (UMA COR APENAS)
-A alma vibrante do projeto. Evoca confiança firmeza e tecnologia elegante sem ser o "azul de banco tradicional". Vamos usar o Índigo Elétrico / Ultramarine.
+A alma vibrante do projeto. Evoca confiança, firmeza e tecnologia elegante. Vamos usar o Azul Mundo Invest.
 | Token | Valor | Uso |
 |---|---|---|
-| `accent-primary` | `#4F46E5` (Indigo 600) | A ÚNICA cor da vitrine. Pontos altos de gráficos, botões de ação final, highlights de metas, links interativos e preenchimentos ativos em gráficos radiais ou vetores "Conceituais". |
-| `accent-hover` | `#4338CA` (Indigo 700) | Hover de botão principal de ação. |
-| `accent-subtle` | `rgba(79, 70, 229, 0.08)` | Fundo com fundo translúcido da marca para seletores (tabs ativas, chips marcados e halos de destaque sob objetos importantes SVG). |
+| `accent-primary` | `#1d63dd` (Blue 600) | A ÚNICA cor da vitrine. Pontos altos de gráficos, botões de ação final, highlights de metas, links interativos e preenchimentos ativos em gráficos radiais ou vetores "Conceituais". |
+| `accent-hover` | `#1854b8` (Blue 700) | Hover de botão principal de ação. |
+| `accent-subtle` | `rgba(29, 99, 221, 0.08)` | Fundo com fundo translúcido da marca para seletores (tabs ativas, chips marcados e halos de destaque sob objetos importantes SVG). |
 
 ### Cores — Status (APENAS para feedback funcional explícito)
 *(Atenção: Não criar variações de azul, amarelo ou roxo para classes de ativos como CDB vs Ações. Apenas se houver um delta positivo vs negativo explícito na carteira num context functional "Ganhou X" e "Perdeu X").*
@@ -176,7 +176,7 @@ Ao criar qualquer tela ou componente para o Mundo Invest Dashboard:
 1. Siga TODAS as decisões de identidade (estrutura clean + linguagem afiada + riqueza visual em conceito).
 2. Use shadcn/ui como infraestrutura oculta, e sobrescreva radicalmente todo padrão que apite como "vazio default" utilizando os custom classNames com nossos tokens.
 3. APENAS tokens semânticos documentados — nunca insira um `border-gray-300` cru. Encontre o token certo.
-4. O `accent-primary` (Indigo 600) é nossa única arma. Traga essa estocada de cor para indicar direcionamento ou dados coroados. Todo o resto no aplicativo orbita calmo e sereno nos tons neutros do Zinc.
+4. O `accent-primary` (Blue #1d63dd) é nossa única arma. Traga essa estocada de cor para indicar direcionamento ou dados coroados. Todo o resto no aplicativo orbita calmo e sereno nos tons neutros do Zinc.
 5. Os cards cruciais de painel DEVEM ter sua CENA NARRATIVA criada integralmente. Não coloque ícones genéricos Lucide gigantes a 10% de opacidade com dots borrados achando que criou uma identidade gráfica. Formule e costure o vetor conforme o conceito (o alvo pro progresso, a órbita na alocação, o mapa topográfico).
 6. A IA implementadora, ao programar o arquivo TSX nas etapas futuras, se encarrega inteiramente de projetar e criar as artes das cenas de fundo usando código SVG declarativo de blocos/linhas.
 7. **"A precisão institucional encontra a leveza e a esperança."** (Esta é a frase balizadora).

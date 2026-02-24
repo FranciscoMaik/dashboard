@@ -315,7 +315,7 @@ export default function ClientCategoriesPage() {
                     {chartData.map((entry, index) => (
                       <Cell
                         key={entry.name}
-                        fill="#4F46E5"
+                        fill="#1d63dd"
                         fillOpacity={1 - index * 0.2}
                       />
                     ))}

@@ -139,7 +139,7 @@ function PatrimonioScene() {
       {/* Fio de fibra óptica (accent) conectando os topos */}
       <path
         d="M45 60 C 60 55, 70 45, 85 40 C 100 35, 110 30, 125 25 C 140 20, 150 18, 165 15"
-        stroke="#4F46E5"
+        stroke="#1d63dd"
         strokeWidth="1.5"
         strokeLinecap="round"
         filter="url(#glow)"
@@ -155,10 +155,10 @@ function PatrimonioScene() {
       </defs>
 
       {/* Pontos nos topos dos pilares */}
-      <circle cx="45" cy="60" r="2.5" fill="#4F46E5" fillOpacity="0.8" />
-      <circle cx="85" cy="40" r="2.5" fill="#4F46E5" fillOpacity="0.8" />
-      <circle cx="125" cy="25" r="2.5" fill="#4F46E5" fillOpacity="0.8" />
-      <circle cx="165" cy="15" r="3" fill="#4F46E5" />
+      <circle cx="45" cy="60" r="2.5" fill="#1d63dd" fillOpacity="0.8" />
+      <circle cx="85" cy="40" r="2.5" fill="#1d63dd" fillOpacity="0.8" />
+      <circle cx="125" cy="25" r="2.5" fill="#1d63dd" fillOpacity="0.8" />
+      <circle cx="165" cy="15" r="3" fill="#1d63dd" />
     </svg>
   );
 }

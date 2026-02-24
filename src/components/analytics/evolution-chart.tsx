@@ -94,10 +94,10 @@ export function EvolutionChart({ data }: EvolutionChartProps) {
                 type="monotone"
                 dataKey="balance"
                 name="Saldo"
-                stroke="#4F46E5"
+                stroke="#1d63dd"
                 strokeWidth={2.5}
-                dot={{ fill: "#4F46E5", r: 3 }}
-                activeDot={{ r: 6, stroke: "#4F46E5", strokeWidth: 2 }}
+                dot={{ fill: "#1d63dd", r: 3 }}
+                activeDot={{ r: 6, stroke: "#1d63dd", strokeWidth: 2 }}
               />
             </LineChart>
           </ResponsiveContainer>

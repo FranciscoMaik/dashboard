@@ -71,7 +71,7 @@ export function ClientCard({
             </Badge>
           )}
           {hasLifePlan && (
-            <Badge className="bg-indigo-600 border-transparent text-white">
+            <Badge className="bg-blue-600 border-transparent text-white">
               Life Plan
             </Badge>
           )}

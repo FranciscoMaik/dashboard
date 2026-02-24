@@ -119,7 +119,7 @@ export function LoginActivityCard() {
               />
               <Bar
                 dataKey="logins"
-                fill="#4F46E5"
+                fill="#1d63dd"
                 radius={[4, 4, 0, 0]}
                 barSize={16}
               />

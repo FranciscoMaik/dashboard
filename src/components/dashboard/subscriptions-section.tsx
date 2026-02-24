@@ -138,10 +138,10 @@ export function SubscriptionsSection() {
                       x2="0"
                       y2="1"
                     >
-                      <stop offset="0%" stopColor="#4F46E5" stopOpacity={0.2} />
+                      <stop offset="0%" stopColor="#1d63dd" stopOpacity={0.2} />
                       <stop
                         offset="100%"
-                        stopColor="#4F46E5"
+                        stopColor="#1d63dd"
                         stopOpacity={0.01}
                       />
                     </linearGradient>
@@ -183,7 +183,7 @@ export function SubscriptionsSection() {
                   <Area
                     type="monotone"
                     dataKey="receita"
-                    stroke="#4F46E5"
+                    stroke="#1d63dd"
                     strokeWidth={2}
                     fill="url(#revenueGradient)"
                   />
