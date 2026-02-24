@@ -24,8 +24,8 @@ export function AssetClassCards({
     <div className="grid gap-4 md:grid-cols-3">
       <Card
         className={cn(
-          "cursor-pointer transition-all hover:bg-accent/5",
-          selected === "fixed" && "border-primary ring-1 ring-primary",
+          "cursor-pointer transition-all hover:bg-surface-hover hover:shadow-card-hover bg-surface-card border-none shadow-card rounded-2xl",
+          selected === "fixed" && "ring-2 ring-blue-500",
         )}
         onClick={() => onSelect("fixed")}
       >
@@ -34,8 +34,10 @@ export function AssetClassCards({
           <Landmark className="h-4 w-4 text-blue-500" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{formatCurrency(fixedTotal)}</div>
-          <p className="text-xs text-muted-foreground">
+          <div className="text-2xl font-bold text-text-primary">
+            {formatCurrency(fixedTotal)}
+          </div>
+          <p className="text-xs text-text-muted mt-1">
             Tesouro, CDBs, Debêntures
           </p>
         </CardContent>
@@ -43,8 +45,8 @@ export function AssetClassCards({
 
       <Card
         className={cn(
-          "cursor-pointer transition-all hover:bg-accent/5",
-          selected === "variable" && "border-primary ring-1 ring-primary",
+          "cursor-pointer transition-all hover:bg-surface-hover hover:shadow-card-hover bg-surface-card border-none shadow-card rounded-2xl",
+          selected === "variable" && "ring-2 ring-emerald-500",
         )}
         onClick={() => onSelect("variable")}
       >
@@ -53,17 +55,17 @@ export function AssetClassCards({
           <TrendingUp className="h-4 w-4 text-emerald-500" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
+          <div className="text-2xl font-bold text-text-primary">
             {formatCurrency(variableTotal)}
           </div>
-          <p className="text-xs text-muted-foreground">Ações, ETFs, Opções</p>
+          <p className="text-xs text-text-muted mt-1">Ações, ETFs, Opções</p>
         </CardContent>
       </Card>
 
       <Card
         className={cn(
-          "cursor-pointer transition-all hover:bg-accent/5",
-          selected === "reits" && "border-primary ring-1 ring-primary",
+          "cursor-pointer transition-all hover:bg-surface-hover hover:shadow-card-hover bg-surface-card border-none shadow-card rounded-2xl",
+          selected === "reits" && "ring-2 ring-indigo-500",
         )}
         onClick={() => onSelect("reits")}
       >
@@ -74,8 +76,10 @@ export function AssetClassCards({
           <Building2 className="h-4 w-4 text-indigo-500" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{formatCurrency(reitsTotal)}</div>
-          <p className="text-xs text-muted-foreground">FIIs</p>
+          <div className="text-2xl font-bold text-text-primary">
+            {formatCurrency(reitsTotal)}
+          </div>
+          <p className="text-xs text-text-muted mt-1">FIIs</p>
         </CardContent>
       </Card>
     </div>

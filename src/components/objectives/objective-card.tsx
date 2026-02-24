@@ -1,17 +1,15 @@
-import { differenceInMonths } from "date-fns";
 import {
-  Calendar,
   Car,
+  Clock,
   GraduationCap,
   Home,
   Plane,
   Trash2,
   TrendingUp,
 } from "lucide-react";
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatCurrency, formatDate } from "@/lib/formatters";
+import { formatCurrency } from "@/lib/formatters";
 
 export type ObjectiveType = "short" | "medium" | "long";
 
@@ -48,20 +46,9 @@ export function ObjectiveCard({
 }: ObjectiveCardProps) {
   const Icon = iconMap[objective.iconName] || TrendingUp;
 
-  const data = [
-    { name: "Atual", value: objective.currentAmount },
-    {
-      name: "Restante",
-      value: Math.max(0, objective.totalValue - objective.currentAmount),
-    },
-  ];
-
-  const activeColor = "#1d63dd"; // Always use Primary Blue for Current amount
-  const mutedColor = "#94a3b8"; // Slate-400
-  const COLORS = [activeColor, mutedColor];
-
-  const progressPercent = Math.round(
-    (objective.currentAmount / objective.totalValue) * 100,
+  const progressPercent = Math.min(
+    100,
+    Math.round((objective.currentAmount / objective.totalValue) * 100),
   );
 
   const getMonthsRemaining = (endDate: string) => {
@@ -73,26 +60,54 @@ export function ObjectiveCard({
     return Math.max(0, months);
   };
 
+  const formatTimeRemaining = (totalMonths: number) => {
+    if (totalMonths <= 0) return "Prazo atingido";
+    if (totalMonths < 12) return `Faltam ${totalMonths} meses`;
+
+    const years = Math.floor(totalMonths / 12);
+    const remainingMonths = totalMonths % 12;
+
+    const yearStr = years === 1 ? "1 ano" : `${years} anos`;
+    const monthStr =
+      remainingMonths === 0
+        ? ""
+        : remainingMonths === 1
+          ? " e 1 mês"
+          : ` e ${remainingMonths} meses`;
+
+    return `Restam ${yearStr}${monthStr}`;
+  };
+
   const monthsRemaining = getMonthsRemaining(objective.endDate);
+  const timeRemainingStr = formatTimeRemaining(monthsRemaining);
 
   return (
     <Card
-      className="cursor-pointer hover:shadow-md transition-all hover:bg-accent/5 relative group"
+      className="cursor-pointer transition-all bg-surface-card border-none shadow-card hover:shadow-card-hover group relative rounded-2xl"
       onClick={() => onClick(objective)}
     >
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary/10 rounded-full">
-            <Icon className="h-5 w-5 text-primary" />
+      <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-3 border-b border-border-default/50">
+        <div className="flex items-start gap-3">
+          <div className="p-2.5 bg-accent-subtle rounded-xl text-accent-primary group-hover:bg-accent-primary group-hover:text-white transition-colors mt-0.5">
+            <Icon className="h-5 w-5" />
           </div>
-          <CardTitle className="text-lg font-medium">
-            {objective.name}
-          </CardTitle>
+          <div className="flex flex-col">
+            <CardTitle className="text-lg font-semibold text-text-primary tracking-tight">
+              {objective.name}
+            </CardTitle>
+            <span className="text-[10px] font-bold tracking-widest uppercase text-text-secondary mt-0.5">
+              {objective.type === "short"
+                ? "Curto Prazo"
+                : objective.type === "medium"
+                  ? "Médio Prazo"
+                  : "Longo Prazo"}
+            </span>
+          </div>
         </div>
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 text-muted-foreground hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="h-8 w-8 text-text-muted hover:text-status-error opacity-0 group-hover:opacity-100 transition-opacity"
           onClick={(e) => {
             e.stopPropagation();
             onDelete(objective);
@@ -101,103 +116,54 @@ export function ObjectiveCard({
           <Trash2 className="h-4 w-4" />
         </Button>
       </CardHeader>
-      <CardContent className="space-y-4 pt-4">
-        {/* Progress Chart */}
-        <div className="h-[120px] w-full relative flex items-center justify-center">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="50%"
-                innerRadius={40}
-                outerRadius={55}
-                paddingAngle={2}
-                dataKey="value"
-                stroke="none"
-              >
-                {data.map((entry, index) => (
-                  <Cell
-                    key={`cell-${entry.name}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip
-                formatter={(value: number | undefined) => [
-                  formatCurrency(value || 0),
-                  "Valor",
-                ]}
-                contentStyle={{
-                  backgroundColor: "hsl(var(--card))",
-                  borderColor: "hsl(var(--border))",
-                  borderRadius: "var(--radius)",
-                  color: "hsl(var(--foreground))",
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <span className="text-xl font-bold">{progressPercent}%</span>
-          </div>
+
+      <CardContent className="space-y-6 pt-5">
+        {/* Simplified Status Header */}
+        <div className="flex justify-between items-center text-sm">
+          <span className="text-text-secondary flex items-center gap-1.5 font-medium">
+            <Clock className="h-4 w-4 text-accent-primary" />
+            {timeRemainingStr}
+          </span>
+          <span className="text-text-muted font-mono">
+            {progressPercent}% Concluído
+          </span>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 text-sm items-center">
-          <div className="flex flex-col gap-1 items-center">
-            <span className="text-muted-foreground flex items-center gap-1">
-              <Calendar className="h-3 w-3" /> Início
-            </span>
-            <span className="font-medium">
-              {formatDate(objective.startDate)}
-            </span>
-          </div>
-
-          <div className="flex flex-col gap-1 items-center">
-            <span className="text-muted-foreground flex items-center gap-1">
-              <Calendar className="h-3 w-3" /> Fim
-            </span>
-            <span className="font-medium">{formatDate(objective.endDate)}</span>
-          </div>
-
-          <div className="flex flex-col gap-1 items-center">
-            <span className="text-muted-foreground flex items-center gap-1">
-              <Calendar className="h-3 w-3" /> Meses restantes
-            </span>
-            <span className="font-medium">
-              {differenceInMonths(new Date(objective.endDate), new Date())}{" "}
-              meses
-            </span>
-          </div>
+        {/* Clean Progress Bar Component */}
+        <div className="w-full bg-surface-hover rounded-full h-2.5 relative overflow-hidden shadow-inner">
+          <div
+            className="absolute top-0 left-0 h-full bg-accent-primary transition-all duration-1000 ease-out"
+            style={{ width: `${progressPercent}%` }}
+          />
         </div>
 
-        <div className="space-y-2 pt-2 border-t">
-          <div className="flex justify-between text-sm items-center">
-            <div className="flex items-center gap-2">
-              <div
-                className="w-2.5 h-2.5 rounded-full"
-                style={{ backgroundColor: activeColor }}
-              />
-              <span className="text-muted-foreground">Atual:</span>
-            </div>
-            <span className="font-semibold">
+        {/* Actionable Metrics directly on the card */}
+        <div className="grid grid-cols-2 gap-4 pt-2">
+          <div className="flex flex-col gap-1 p-3 rounded-xl bg-surface-hover/50">
+            <span className="text-xs text-text-muted uppercase tracking-wider font-semibold">
+              Alocado
+            </span>
+            <span className="font-medium text-text-primary text-base">
               {formatCurrency(objective.currentAmount)}
             </span>
           </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Mensal:</span>
-            <span className="font-semibold text-green-600 dark:text-green-400">
-              {formatCurrency(objective.monthlyContribution)}
+
+          <div className="flex flex-col gap-1 p-3 rounded-xl bg-surface-hover/50">
+            <span className="text-xs text-text-muted uppercase tracking-wider font-semibold">
+              Alvo Total
             </span>
-          </div>
-          <div className="flex justify-between text-sm items-center">
-            <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full bg-muted-foreground/30" />
-              <span className="text-muted-foreground">Meta:</span>
-            </div>
-            <span className="font-bold text-primary">
+            <span className="font-bold text-accent-primary text-base">
               {formatCurrency(objective.totalValue)}
             </span>
           </div>
+        </div>
+
+        {/* Footnote about cadence */}
+        <div className="text-sm font-medium border-t border-border-default/30 pt-4 flex justify-between items-center text-text-secondary">
+          <span>Aporte Mensal:</span>
+          <span className="text-text-primary font-semibold tabular-nums">
+            {formatCurrency(objective.monthlyContribution)}
+          </span>
         </div>
       </CardContent>
     </Card>

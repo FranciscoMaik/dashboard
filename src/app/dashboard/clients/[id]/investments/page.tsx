@@ -7,6 +7,11 @@ import {
   type AssetType,
 } from "@/components/investments/asset-class-cards";
 import { type Asset, AssetTable } from "@/components/investments/asset-table";
+import {
+  EditRecommendedPortfolioDialog,
+  type PortfolioTarget,
+} from "@/components/investments/edit-recommended-portfolio-dialog";
+import { PortfolioComparison } from "@/components/investments/portfolio-comparison";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/formatters";
 
@@ -76,6 +81,16 @@ const mockAssets: Asset[] = [
 export default function ClientInvestmentsPage() {
   const [selectedType, setSelectedType] = useState<AssetType | null>(null);
 
+  // Recommended Portfolio State (Mocked)
+  const [recommendedTargets, setRecommendedTargets] = useState<PortfolioTarget>(
+    {
+      fixed: 40,
+      variable: 40,
+      reits: 20,
+    },
+  );
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
   const calculateTotal = (type: AssetType) => {
     return (
       mockAssets
@@ -94,14 +109,23 @@ export default function ClientInvestmentsPage() {
   const reitsTotal = calculateTotal("reits");
   const grandTotal = fixedTotal + variableTotal + reitsTotal;
 
+  // Calculate percentage composition for the comparison component
+  const currentComposition = {
+    fixed: grandTotal > 0 ? (fixedTotal / grandTotal) * 100 : 0,
+    variable: grandTotal > 0 ? (variableTotal / grandTotal) * 100 : 0,
+    reits: grandTotal > 0 ? (reitsTotal / grandTotal) * 100 : 0,
+  };
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold tracking-tight">Investimentos</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-text-primary">
+          Investimentos
+        </h2>
       </div>
 
       {/* Total Equity Summary */}
-      <Card className="bg-primary text-primary-foreground border-none">
+      <Card className="bg-accent-primary text-white border-none shadow-card rounded-2xl">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium opacity-90">
             Patrimônio Total
@@ -116,8 +140,16 @@ export default function ClientInvestmentsPage() {
         </CardContent>
       </Card>
 
+      <PortfolioComparison
+        current={currentComposition}
+        recommended={recommendedTargets}
+        onEditRecommended={() => setIsEditModalOpen(true)}
+      />
+
       <div className="space-y-4">
-        <h3 className="text-xl font-semibold">Alocação</h3>
+        <h3 className="text-xl font-semibold text-text-primary">
+          Alocação por Classe de Ativo
+        </h3>
         <AssetClassCards
           fixedTotal={fixedTotal}
           variableTotal={variableTotal}
@@ -148,6 +180,13 @@ export default function ClientInvestmentsPage() {
           <AssetTable type={selectedType} assets={mockAssets} />
         </div>
       )}
+
+      <EditRecommendedPortfolioDialog
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        currentTargets={recommendedTargets}
+        onSave={setRecommendedTargets}
+      />
     </div>
   );
 }
