@@ -113,6 +113,7 @@ export interface Transaction {
   type: "income" | "expense";
   category: string;
   subcategory: string;
+  bank?: string;
   ignored: boolean;
 }
 
@@ -127,6 +128,15 @@ export const getTransactions = (clientId: string): Transaction[] => {
     const date = new Date();
     date.setDate(date.getDate() - Math.floor(Math.random() * 90)); // Last 90 days
 
+    const banks = [
+      "Nubank",
+      "Itaú",
+      "XP Investimentos",
+      "Bradesco",
+      "Banco do Brasil",
+    ];
+    const randomBank = banks[Math.floor(Math.random() * banks.length)];
+
     return {
       id: `trans_${i}`,
       date: date.toISOString().split("T")[0],
@@ -135,6 +145,7 @@ export const getTransactions = (clientId: string): Transaction[] => {
       type: isExpense ? "expense" : "income",
       category: isExpense ? "Alimentação" : "Renda",
       subcategory: isExpense ? "Mercado" : "Salário",
+      bank: randomBank,
       ignored: Math.random() > 0.95, // 5% ignored
     };
   });

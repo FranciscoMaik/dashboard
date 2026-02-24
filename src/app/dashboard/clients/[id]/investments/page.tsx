@@ -180,7 +180,7 @@ export default function ClientInvestmentsPage() {
   };
 
   return (
-    <div className="space-y-8 max-w-screen-2xl mx-auto">
+    <div className="space-y-8">
       {/* Page Header */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-text-primary">

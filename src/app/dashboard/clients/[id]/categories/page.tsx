@@ -263,7 +263,7 @@ export default function ClientCategoriesPage() {
   };
 
   return (
-    <div className="space-y-8 max-w-screen-2xl mx-auto">
+    <div className="space-y-8">
       {/* Page Header */}
       <div className="flex items-start md:items-center justify-between flex-col md:flex-row gap-4">
         <div>

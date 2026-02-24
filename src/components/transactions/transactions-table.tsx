@@ -6,6 +6,7 @@ import {
   Edit2,
   Eye,
   EyeOff,
+  Landmark,
   MoreVertical,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -47,6 +48,9 @@ export function TransactionsTable({
             <TableHead className="w-[50px] text-text-muted text-xs uppercase tracking-wide" />
             <TableHead className="text-text-muted text-xs uppercase tracking-wide">
               Transação
+            </TableHead>
+            <TableHead className="text-text-muted text-xs uppercase tracking-wide">
+              Banco
             </TableHead>
             <TableHead className="text-text-muted text-xs uppercase tracking-wide">
               Categoria
@@ -95,6 +99,14 @@ export function TransactionsTable({
                         Desconsiderado
                       </span>
                     )}
+                  </div>
+                </TableCell>
+                <TableCell className="py-4">
+                  <div className="flex items-center gap-2">
+                    <Landmark className="h-4 w-4 text-text-muted" />
+                    <span className="text-sm text-text-secondary">
+                      {transaction.bank || "Desconhecido"}
+                    </span>
                   </div>
                 </TableCell>
                 <TableCell className="py-4">

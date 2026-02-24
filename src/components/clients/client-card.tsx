@@ -31,13 +31,13 @@ export function ClientCard({
   hasLifePlan,
 }: ClientCardProps) {
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card className="bg-surface-card rounded-card shadow-card hover:shadow-hover border-none transition-all duration-300">
       <CardHeader>
         <div className="flex justify-between items-start">
           <div className="flex items-center gap-3">
-            <Avatar>
+            <Avatar className="h-10 w-10 ring-1 ring-border-default ring-offset-2 ring-offset-surface-card">
               <AvatarImage src="" />
-              <AvatarFallback>
+              <AvatarFallback className="bg-accent-subtle text-accent-primary font-semibold text-sm">
                 {name
                   .split(" ")
                   .map((n) => n[0])
@@ -46,32 +46,34 @@ export function ClientCard({
                   .toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <CardTitle className="text-lg">{name}</CardTitle>
+            <CardTitle className="text-lg font-semibold tracking-tight text-text-primary">
+              {name}
+            </CardTitle>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-2 text-sm text-muted-foreground">
-        <div className="flex items-center gap-2">
-          <Mail className="h-4 w-4" />
-          <span>{email}</span>
+      <CardContent className="space-y-2 text-sm text-text-muted">
+        <div className="flex items-center gap-2.5">
+          <Mail className="h-3.5 w-3.5 shrink-0" />
+          <span className="truncate">{email}</span>
         </div>
-        <div className="flex items-center gap-2">
-          <Phone className="h-4 w-4" />
-          <span>{phone}</span>
+        <div className="flex items-center gap-2.5">
+          <Phone className="h-3.5 w-3.5 shrink-0" />
+          <span className="truncate">{phone}</span>
         </div>
-        <div className="flex gap-1 mt-4 w-full align-center justify-end min-h-[25px]">
+        <div className="flex flex-wrap gap-1.5 mt-5 w-full items-center justify-end min-h-[24px]">
           {hasOpenFinance && (
-            <Badge className="bg-blue-400 border-transparent text-white">
+            <Badge className="bg-surface-page border border-border-default text-text-secondary rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-wide uppercase hover:bg-surface-hover">
               Open Finance
             </Badge>
           )}
           {hasB3 && (
-            <Badge className="bg-green-500 border-transparent text-white">
+            <Badge className="bg-surface-page border border-border-default text-text-secondary rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-wide uppercase hover:bg-surface-hover">
               B3
             </Badge>
           )}
           {hasLifePlan && (
-            <Badge className="bg-blue-600 border-transparent text-white">
+            <Badge className="bg-surface-page border border-border-default text-text-secondary rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-wide uppercase hover:bg-surface-hover">
               Life Plan
             </Badge>
           )}
@@ -79,7 +81,7 @@ export function ClientCard({
       </CardContent>
       <CardFooter>
         <Link href={`/dashboard/clients/${id}`} className="w-full">
-          <Button variant="outline" className="w-full justify-between group">
+          <Button className="w-full justify-between group rounded-button border border-border-default bg-surface-page text-text-secondary hover:text-text-primary hover:bg-surface-hover shadow-none transition-colors h-9">
             Ver Perfil
             <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Button>

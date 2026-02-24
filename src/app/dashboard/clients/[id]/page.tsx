@@ -200,7 +200,7 @@ export default async function ClientProfilePage({
     .toUpperCase();
 
   return (
-    <div className="space-y-8 max-w-screen-2xl mx-auto">
+    <div className="space-y-8">
       {/* ─── Hero Header with Topography ─── */}
       <div className="relative overflow-hidden rounded-card bg-surface-card shadow-card px-8 py-10">
         <TopographyTexture />
