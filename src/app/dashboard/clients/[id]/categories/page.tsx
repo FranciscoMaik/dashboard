@@ -6,9 +6,9 @@ import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { CategoryCard } from "@/components/categories/category-card";
 import { ManageCategoryDialog } from "@/components/categories/manage-category-dialog";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
-// Mock data integration
+// Mock data
 const mockCategories = [
   {
     id: "1",
@@ -35,14 +35,87 @@ const mockCategories = [
     name: "Transporte",
     limit: 800,
     spent: 450,
-    subcategories: [{ id: "3a", name: "Combustível", spent: 450 }],
+    subcategories: [
+      { id: "3a", name: "Combustível", spent: 320 },
+      { id: "3b", name: "Estacionamento", spent: 80 },
+      { id: "3c", name: "Uber / 99", spent: 50 },
+    ],
   },
   {
     id: "4",
     name: "Lazer",
     limit: 1000,
-    spent: 0,
-    subcategories: [],
+    spent: 720,
+    subcategories: [
+      { id: "4a", name: "Cinema / Teatro", spent: 180 },
+      { id: "4b", name: "Viagens", spent: 400 },
+      { id: "4c", name: "Hobbies", spent: 140 },
+    ],
+  },
+  {
+    id: "5",
+    name: "Saúde",
+    limit: 1500,
+    spent: 980,
+    subcategories: [
+      { id: "5a", name: "Plano de Saúde", spent: 650 },
+      { id: "5b", name: "Farmácia", spent: 180 },
+      { id: "5c", name: "Academia", spent: 150 },
+    ],
+  },
+  {
+    id: "6",
+    name: "Educação",
+    limit: 2500,
+    spent: 1900,
+    subcategories: [
+      { id: "6a", name: "Faculdade / Pós", spent: 1200 },
+      { id: "6b", name: "Cursos Online", spent: 400 },
+      { id: "6c", name: "Livros", spent: 300 },
+    ],
+  },
+  {
+    id: "7",
+    name: "Vestuário",
+    limit: 600,
+    spent: 350,
+    subcategories: [
+      { id: "7a", name: "Roupas", spent: 250 },
+      { id: "7b", name: "Calçados", spent: 100 },
+    ],
+  },
+  {
+    id: "8",
+    name: "Assinaturas",
+    limit: 400,
+    spent: 385,
+    subcategories: [
+      { id: "8a", name: "Streaming (Netflix, Spotify)", spent: 85 },
+      { id: "8b", name: "Software / Apps", spent: 150 },
+      { id: "8c", name: "Jornais / Revistas", spent: 50 },
+      { id: "8d", name: "Cloud / Armazenamento", spent: 100 },
+    ],
+  },
+  {
+    id: "9",
+    name: "Pets",
+    limit: 500,
+    spent: 620,
+    subcategories: [
+      { id: "9a", name: "Ração / Petiscos", spent: 280 },
+      { id: "9b", name: "Veterinário", spent: 250 },
+      { id: "9c", name: "Banho / Tosa", spent: 90 },
+    ],
+  },
+  {
+    id: "10",
+    name: "Outros",
+    limit: 800,
+    spent: 210,
+    subcategories: [
+      { id: "10a", name: "Presentes", spent: 130 },
+      { id: "10b", name: "Doações", spent: 80 },
+    ],
   },
 ];
 
@@ -61,8 +134,6 @@ interface Category {
 }
 
 export default function ClientCategoriesPage() {
-  // Local state for categories (initialized from mock)
-  // In a real app this would be synced with backend
   const [categories, setCategories] = useState<Category[]>(mockCategories);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogMode, setDialogMode] = useState<"Category" | "Subcategory">(
@@ -76,27 +147,14 @@ export default function ClientCategoriesPage() {
   );
   const [showChart, setShowChart] = useState(false);
 
-  // Prepare data for the donut chart
   const chartData = useMemo(() => {
     return categories
       .map((cat) => ({
         name: cat.name,
         value: cat.spent,
       }))
-      .filter((c) => c.value > 0); // Only show categories with actual expenses
+      .filter((c) => c.value > 0);
   }, [categories]);
-
-  // Design System accent palette for the chart
-  const COLORS = [
-    "#4F46E5",
-    "#10B981",
-    "#F59E0B",
-    "#EF4444",
-    "#8B5CF6",
-    "#EC4899",
-    "#3B82F6",
-    "#14B8A6",
-  ];
 
   const handleCreateCategory = () => {
     setDialogMode("Category");
@@ -153,7 +211,6 @@ export default function ClientCategoriesPage() {
 
   const handleSave = (data: { name: string; limit?: number }) => {
     if (editingItem) {
-      // Edit Mode
       if (dialogMode === "Category") {
         setCategories((prev) =>
           prev.map((c) =>
@@ -178,7 +235,6 @@ export default function ClientCategoriesPage() {
         );
       }
     } else {
-      // Create Mode
       if (dialogMode === "Category") {
         const newCategory: Category = {
           id: `cat_${Date.now()}`,
@@ -207,90 +263,96 @@ export default function ClientCategoriesPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 max-w-screen-2xl mx-auto">
+      {/* Page Header */}
       <div className="flex items-start md:items-center justify-between flex-col md:flex-row gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-text-primary">
+          <h1 className="text-3xl font-bold tracking-tight text-text-primary">
             Categorias
-          </h2>
-          <p className="text-text-secondary mt-1">
+          </h1>
+          <p className="text-sm text-text-muted mt-1">
             Gerencie limites de gastos e o uso mensal.
           </p>
         </div>
         <div className="flex items-center gap-3">
           <Button
             variant="outline"
-            className="bg-surface-card border-border-default hover:bg-surface-hover text-text-primary"
+            className="border-border-default text-text-secondary hover:bg-surface-hover rounded-button"
             onClick={() => setShowChart(!showChart)}
           >
             <PieChartIcon className="mr-2 h-4 w-4" />
             {showChart ? "Ocultar Gráfico" : "Mostrar Gráfico"}
           </Button>
-          <Button onClick={handleCreateCategory}>
+          <Button
+            onClick={handleCreateCategory}
+            className="bg-accent-primary hover:bg-accent-hover text-white font-semibold tracking-tight rounded-button"
+          >
             <Plus className="mr-2 h-4 w-4" /> Adicionar Categoria
           </Button>
         </div>
       </div>
 
+      {/* Donut Chart */}
       {showChart && chartData.length > 0 && (
-        <Card className="bg-surface-card border-border-default shadow-card border-none rounded-2xl p-6">
-          <h3 className="text-lg font-semibold text-text-primary mb-6">
-            Gastos por Categoria
-          </h3>
-          <div className="h-[250px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={chartData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={90}
-                  paddingAngle={3}
-                  dataKey="value"
-                  stroke="none"
-                >
-                  {chartData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(value: number | undefined) =>
-                    new Intl.NumberFormat("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    }).format(value || 0)
-                  }
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    borderColor: "hsl(var(--border))",
-                    borderRadius: "12px",
-                    boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
-                    border: "none",
-                    color: "var(--color-text-primary)",
-                  }}
-                  itemStyle={{
-                    color: "var(--color-text-primary)",
-                    fontWeight: 500,
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
+        <Card>
+          <CardContent className="pt-6">
+            <h3 className="text-sm font-semibold text-text-primary tracking-tight mb-5">
+              Gastos por Categoria
+            </h3>
+            <div className="h-[250px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={chartData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={90}
+                    paddingAngle={3}
+                    dataKey="value"
+                    stroke="none"
+                  >
+                    {chartData.map((entry, index) => (
+                      <Cell
+                        key={entry.name}
+                        fill="#4F46E5"
+                        fillOpacity={1 - index * 0.2}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(value: number | undefined) =>
+                      new Intl.NumberFormat("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      }).format(value || 0)
+                    }
+                    contentStyle={{
+                      backgroundColor: "#FFFFFF",
+                      borderColor: "#E4E4E7",
+                      borderRadius: "12px",
+                      boxShadow: "0 2px 24px -6px rgba(0,0,0,0.03)",
+                      fontSize: "12px",
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
         </Card>
       )}
 
       {showChart && chartData.length === 0 && (
-        <Card className="bg-surface-card border-border-default shadow-card border-none rounded-2xl p-8 text-center bg-surface-hover/30">
-          <p className="text-text-muted">
-            Nenhum gasto registrado para gerar o gráfico.
-          </p>
+        <Card>
+          <CardContent className="py-8 text-center">
+            <p className="text-sm text-text-muted">
+              Nenhum gasto registrado para gerar o gráfico.
+            </p>
+          </CardContent>
         </Card>
       )}
 
+      {/* Category Grid */}
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-start">
         {categories.map((category) => (
           <CategoryCard
@@ -305,7 +367,7 @@ export default function ClientCategoriesPage() {
         ))}
 
         {categories.length === 0 && (
-          <div className="col-span-full text-center py-12 text-text-muted border border-border-default rounded-2xl border-dashed bg-surface-card">
+          <div className="col-span-full text-center py-12 text-text-muted text-sm border border-border-subtle border-dashed rounded-card">
             Nenhuma categoria encontrada. Crie uma para começar.
           </div>
         )}

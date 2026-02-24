@@ -65,26 +65,33 @@ export function EditTransactionDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Editar Transação</DialogTitle>
+          <DialogTitle className="text-text-primary tracking-tight">
+            Editar Transação
+          </DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
+        <div className="space-y-4 py-4">
+          <div className="space-y-2">
+            <Label
+              htmlFor="name"
+              className="text-xs text-text-muted uppercase tracking-wide"
+            >
               Nome
             </Label>
             <Input
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="col-span-3"
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="category" className="text-right">
+          <div className="space-y-2">
+            <Label
+              htmlFor="category"
+              className="text-xs text-text-muted uppercase tracking-wide"
+            >
               Categoria
             </Label>
             <Select value={category} onValueChange={setCategory}>
-              <SelectTrigger className="col-span-3">
+              <SelectTrigger>
                 <SelectValue placeholder="Selecione a categoria" />
               </SelectTrigger>
               <SelectContent>
@@ -96,12 +103,15 @@ export function EditTransactionDialog({
               </SelectContent>
             </Select>
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="subcategory" className="text-right">
+          <div className="space-y-2">
+            <Label
+              htmlFor="subcategory"
+              className="text-xs text-text-muted uppercase tracking-wide"
+            >
               Subcategoria
             </Label>
             <Select value={subcategory} onValueChange={setSubcategory}>
-              <SelectTrigger className="col-span-3">
+              <SelectTrigger>
                 <SelectValue placeholder="Selecione a subcategoria" />
               </SelectTrigger>
               <SelectContent>
@@ -115,7 +125,11 @@ export function EditTransactionDialog({
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={handleSave}>
+          <Button
+            type="submit"
+            onClick={handleSave}
+            className="bg-accent-primary hover:bg-accent-hover text-white font-semibold tracking-tight rounded-button"
+          >
             Salvar Alterações
           </Button>
         </DialogFooter>

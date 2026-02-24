@@ -598,27 +598,34 @@ export default function ClientAnalysisPage() {
 
   const client = getClientData(params.id as string);
 
-  // Get data based on period (using mock fallback logic for simpler proto)
   const summaryData = MOCK_SUMMARY[selectedPeriod] || MOCK_SUMMARY["3M"];
 
-  // In a real app, charts would also filter based on period
-  // For now we use static mocks or a slice
   const chartData =
     selectedPeriod === "1W" ? MOCK_EVOLUTION.slice(-1) : MOCK_EVOLUTION;
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-        <h2 className="text-3xl font-bold tracking-tight">
-          Análise Financeira
-        </h2>
+    <div className="space-y-8 max-w-screen-2xl mx-auto">
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-text-primary">
+            Análise Financeira
+          </h1>
+          <p className="text-sm text-text-muted mt-1">
+            Panorama financeiro do período selecionado
+          </p>
+        </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <DateRangeFilter
             selected={selectedPeriod}
             onSelect={setSelectedPeriod}
           />
-          <Button variant="outline" asChild>
+          <Button
+            variant="outline"
+            asChild
+            className="border-border-default text-text-secondary hover:bg-surface-hover rounded-button"
+          >
             <Link
               href={`/dashboard/clients/${params.id}/transactions?period=${selectedPeriod}`}
             >
@@ -628,21 +635,17 @@ export default function ClientAnalysisPage() {
         </div>
       </div>
 
-      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
+      <div className="space-y-6">
         {/* Summary Cards */}
         <AnalyticsSummary {...summaryData} />
 
         {/* Connected Banks Section */}
         {client.connectedBanks && client.connectedBanks.length > 0 && (
-          <div className="grid gap-4 md:grid-cols-4">
-            <div className="md:col-span-4">
-              <ConnectedBanks banks={client.connectedBanks} />
-            </div>
-          </div>
+          <ConnectedBanks banks={client.connectedBanks} />
         )}
 
         {/* Charts Grid */}
-        <div className="grid gap-4 md:grid-cols-5">
+        <div className="grid gap-6 md:grid-cols-5">
           <EvolutionChart data={chartData} />
           <TopExpensesChart data={MOCK_TOP_EXPENSES} />
         </div>

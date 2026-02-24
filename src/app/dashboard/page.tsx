@@ -1,9 +1,11 @@
 import { RotateCw } from "lucide-react";
 import { AgeDistributionTable } from "@/components/dashboard/age-distribution-table";
-import { AssetAllocationCard } from "@/components/dashboard/asset-allocation-card";
 import { ClientGrowthCard } from "@/components/dashboard/client-growth-card";
+import { LoginActivityCard } from "@/components/dashboard/login-activity-card";
 import { OverviewDateFilter } from "@/components/dashboard/overview-date-filter";
+import { OverviewStatsRow } from "@/components/dashboard/overview-stats-row";
 import { RatingsSummary } from "@/components/dashboard/ratings-summary";
+import { SubscriptionsSection } from "@/components/dashboard/subscriptions-section";
 import { Button } from "@/components/ui/button";
 
 export default function DashboardPage() {
@@ -31,16 +33,21 @@ export default function DashboardPage() {
           </Button>
         </div>
       </div>
+      {/* Stats Row */}
+      <OverviewStatsRow />
 
-      {/* Charts Section 1: Growth Chart and Assets Under Management */}
+      {/* Charts Section 1: Growth Chart and Login Activity */}
       <div className="grid gap-6 md:grid-cols-1 xl:grid-cols-7 items-stretch">
         <div className="md:col-span-1 xl:col-span-4">
           <ClientGrowthCard />
         </div>
         <div className="md:col-span-1 xl:col-span-3">
-          <AssetAllocationCard />
+          <LoginActivityCard />
         </div>
       </div>
+
+      {/* Subscriptions Section */}
+      <SubscriptionsSection />
 
       {/* Secondary Row: Ratings and Demographics */}
       <div className="grid gap-6 md:grid-cols-1 xl:grid-cols-7 items-stretch">

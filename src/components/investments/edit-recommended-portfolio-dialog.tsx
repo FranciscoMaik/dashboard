@@ -25,6 +25,12 @@ interface EditRecommendedPortfolioDialogProps {
   onSave: (targets: PortfolioTarget) => void;
 }
 
+const FIELDS: { key: keyof PortfolioTarget; label: string }[] = [
+  { key: "fixed", label: "Renda Fixa" },
+  { key: "variable", label: "Renda Variável" },
+  { key: "reits", label: "Fundos Imobiliários" },
+];
+
 export function EditRecommendedPortfolioDialog({
   isOpen,
   onClose,
@@ -34,7 +40,6 @@ export function EditRecommendedPortfolioDialog({
   const [targets, setTargets] = useState<PortfolioTarget>(currentTargets);
   const [error, setError] = useState<string | null>(null);
 
-  // Reset state when opening with new targets
   useEffect(() => {
     if (isOpen) {
       setTargets(currentTargets);
@@ -68,30 +73,32 @@ export function EditRecommendedPortfolioDialog({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Editar Carteira Recomendada</DialogTitle>
-          <DialogDescription>
-            Defina o alvo percentual de alocação para cada classe de ativos
-            deste cliente. A soma deve resultar em 100%.
+          <DialogTitle className="text-text-primary tracking-tight">
+            Editar Carteira Recomendada
+          </DialogTitle>
+          <DialogDescription className="text-text-muted text-xs">
+            Defina o alvo percentual de alocação para cada classe. A soma deve
+            resultar em 100%.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-6 py-4">
-          <div className="flex flex-col gap-4">
-            <div className="grid grid-cols-4 items-center gap-4">
+        <div className="space-y-5 py-4">
+          {FIELDS.map(({ key, label }) => (
+            <div key={key} className="space-y-2">
               <Label
-                htmlFor="fixed"
-                className="text-right col-span-1 font-medium text-text-secondary"
+                htmlFor={key}
+                className="text-xs text-text-muted uppercase tracking-wide"
               >
-                Renda Fixa
+                {label}
               </Label>
-              <div className="col-span-3 relative">
+              <div className="relative">
                 <Input
-                  id="fixed"
+                  id={key}
                   type="number"
                   min="0"
                   max="100"
-                  value={targets.fixed}
-                  onChange={(e) => handleNumberChange("fixed", e.target.value)}
+                  value={targets[key]}
+                  onChange={(e) => handleNumberChange(key, e.target.value)}
                   className="pr-8"
                 />
                 <span className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted text-sm">
@@ -99,59 +106,11 @@ export function EditRecommendedPortfolioDialog({
                 </span>
               </div>
             </div>
+          ))}
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label
-                htmlFor="variable"
-                className="text-right col-span-1 font-medium text-text-secondary"
-              >
-                Renda Variável
-              </Label>
-              <div className="col-span-3 relative">
-                <Input
-                  id="variable"
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={targets.variable}
-                  onChange={(e) =>
-                    handleNumberChange("variable", e.target.value)
-                  }
-                  className="pr-8"
-                />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted text-sm">
-                  %
-                </span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label
-                htmlFor="reits"
-                className="text-right col-span-1 font-medium text-text-secondary"
-              >
-                Fundos Imobiliários
-              </Label>
-              <div className="col-span-3 relative">
-                <Input
-                  id="reits"
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={targets.reits}
-                  onChange={(e) => handleNumberChange("reits", e.target.value)}
-                  className="pr-8"
-                />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted text-sm">
-                  %
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between mt-2 pt-4 border-t border-border-default/50">
-            <span className="text-sm font-medium text-text-secondary">
-              Total Acumulado:
+          <div className="flex items-center justify-between pt-4 border-t border-border-subtle">
+            <span className="text-xs text-text-muted uppercase tracking-wide">
+              Total Acumulado
             </span>
             <span
               className={`text-lg font-bold tabular-nums ${total === 100 ? "text-status-success" : "text-status-error"}`}
@@ -161,18 +120,26 @@ export function EditRecommendedPortfolioDialog({
           </div>
 
           {error && (
-            <div className="py-2.5 px-3 rounded-lg bg-status-error/10 text-status-error flex items-center animate-in fade-in">
-              <AlertCircle className="h-4 w-4" />
-              <div className="ml-2 text-xs font-medium">{error}</div>
+            <div className="py-2.5 px-3 rounded-card bg-status-error/10 text-status-error flex items-center animate-in fade-in">
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              <span className="ml-2 text-xs font-medium">{error}</span>
             </div>
           )}
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="border-border-default text-text-secondary rounded-button"
+          >
             Cancelar
           </Button>
-          <Button onClick={handleSave} disabled={total !== 100}>
+          <Button
+            onClick={handleSave}
+            disabled={total !== 100}
+            className="bg-accent-primary hover:bg-accent-hover text-white font-semibold tracking-tight rounded-button"
+          >
             <Check className="mr-2 h-4 w-4" />
             Salvar Meta
           </Button>

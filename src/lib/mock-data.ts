@@ -27,6 +27,12 @@ export const getClientData = (id: string) => {
       id === "1" ? "João Silva" : id === "2" ? "Maria Santos" : "Cliente " + id,
     email: `cliente${id}@exemplo.com`,
     phone: "+55 (11) 99999-1234",
+    cpf:
+      id === "1"
+        ? "123.456.789-00"
+        : id === "2"
+          ? "987.654.321-00"
+          : "111.222.333-44",
     lastLogin: "há 2 horas",
     createdAt: "15 Jan, 2024",
     age: 34,

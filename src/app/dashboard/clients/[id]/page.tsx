@@ -282,6 +282,7 @@ export default async function ClientProfilePage({
                   </h3>
                 </div>
                 <div className="space-y-0">
+                  <InfoRow icon={User} label="CPF" value={client.cpf} />
                   <InfoRow icon={Mail} label="E-mail" value={client.email} />
                   <InfoRow icon={Phone} label="Telefone" value={client.phone} />
                 </div>
