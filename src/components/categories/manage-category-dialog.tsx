@@ -44,54 +44,71 @@ export function ManageCategoryDialog({
     onClose();
   };
 
+  const isCategory = type === "Category";
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle className="text-text-primary tracking-tight">
             {initialData
-              ? `Editar ${type === "Category" ? "Categoria" : "Subcategoria"}`
-              : `Adicionar ${type === "Category" ? "Categoria" : "Subcategoria"}`}
+              ? `Editar ${isCategory ? "Categoria" : "Subcategoria"}`
+              : `Adicionar ${isCategory ? "Categoria" : "Subcategoria"}`}
           </DialogTitle>
-          <DialogDescription>
-            {type === "Category"
+          <DialogDescription className="text-text-muted text-xs">
+            {isCategory
               ? "Defina o nome e o limite de gastos para esta categoria."
               : "Defina o nome para esta subcategoria."}
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
+
+        <div className="space-y-4 py-4">
+          <div className="space-y-2">
+            <Label
+              htmlFor="name"
+              className="text-xs text-text-muted uppercase tracking-wide"
+            >
               Nome
             </Label>
             <Input
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="col-span-3"
             />
           </div>
-          {type === "Category" && (
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="limit" className="text-right">
-                Limite
+          {isCategory && (
+            <div className="space-y-2">
+              <Label
+                htmlFor="limit"
+                className="text-xs text-text-muted uppercase tracking-wide"
+              >
+                Limite (R$)
               </Label>
               <Input
                 id="limit"
                 type="number"
                 value={limit}
                 onChange={(e) => setLimit(e.target.value)}
-                className="col-span-3"
                 placeholder="0.00"
               />
             </div>
           )}
         </div>
+
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="border-border-default text-text-secondary rounded-button"
+          >
             Cancelar
           </Button>
-          <Button onClick={handleSave}>Salvar</Button>
+          <Button
+            onClick={handleSave}
+            className="bg-accent-primary hover:bg-accent-hover text-white font-semibold tracking-tight rounded-button"
+          >
+            Salvar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

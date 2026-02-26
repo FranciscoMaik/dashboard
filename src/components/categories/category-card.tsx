@@ -53,30 +53,42 @@ export function CategoryCard({
   const isOverLimit = category.spent > category.limit;
 
   return (
-    <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-      <div className="p-6 pb-2">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-4">
-            <h3 className="font-semibold text-lg">{category.name}</h3>
+    <div className="rounded-2xl bg-surface-card text-text-primary shadow-card hover:shadow-card-hover transition-all duration-300">
+      <div className="p-4 pb-2">
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex items-center gap-3">
+            <h3 className="font-semibold text-base tracking-tight text-text-primary">
+              {category.name}
+            </h3>
             {isOverLimit ? (
-              <Badge variant="destructive">Acima do Limite</Badge>
+              <Badge variant="destructive" className="text-[10px] px-1.5 py-0">
+                Acima
+              </Badge>
             ) : (
               <Badge
                 variant="outline"
-                className="bg-green-500/10 text-green-600 border-green-200"
+                className="bg-status-success/10 text-status-success border-status-success/20 text-[10px] px-1.5 py-0 font-medium"
               >
                 OK
               </Badge>
             )}
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground mr-2">
-              <strong>{formatCurrency(category.spent)}</strong> /{" "}
-              {formatCurrency(category.limit)}
+          <div className="flex items-center gap-1">
+            <span className="text-xs text-text-secondary mr-1 flex flex-col text-right">
+              <strong className="text-text-primary text-sm tracking-tight">
+                {formatCurrency(category.spent)}
+              </strong>
+              <span className="text-[10px] uppercase tracking-wider">
+                / {formatCurrency(category.limit)}
+              </span>
             </span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 text-text-muted hover:text-text-primary hover:bg-surface-hover"
+                >
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -100,41 +112,51 @@ export function CategoryCard({
           </div>
         </div>
 
-        <div className="space-y-1 mb-4">
+        <div className="space-y-1 mb-2">
           <Progress
             value={percentage}
-            className={`h-2 ${isOverLimit ? "bg-red-100" : ""}`}
-            indicatorClassName={isOverLimit ? "bg-red-500" : "bg-primary"}
+            className={`h-1.5 bg-surface-hover overflow-hidden rounded-full`}
+            indicatorClassName={
+              isOverLimit ? "bg-status-error" : "bg-accent-primary"
+            }
           />
-          <p className="text-xs text-muted-foreground text-right">
-            {percentage.toFixed(0)}% usado
+          <p className="text-[10px] text-text-muted font-medium text-right uppercase tracking-wider">
+            {percentage.toFixed(0)}% Utilizado
           </p>
         </div>
       </div>
 
-      <div className="px-6">
+      <div className="px-4">
         <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="subcategories" className="border-b-0">
-            <AccordionTrigger className="py-2 text-sm text-muted-foreground hover:no-underline">
-              Ver Subcategorias ({category.subcategories.length})
+          <AccordionItem
+            value="subcategories"
+            className="border-b-0 border-t border-border-default/50 pt-1"
+          >
+            <AccordionTrigger className="py-2 text-[11px] font-semibold uppercase tracking-wider text-text-secondary hover:no-underline flex-row-reverse justify-end gap-2">
+              Subcategorias{" "}
+              <span className="text-text-muted">
+                ({category.subcategories.length})
+              </span>
             </AccordionTrigger>
             <AccordionContent>
-              <div className="space-y-2 pb-4">
+              <div className="space-y-1 pb-3 pt-1">
                 {category.subcategories.map((sub) => (
                   <div
                     key={sub.id}
-                    className="flex items-center justify-between p-2 rounded-md bg-muted/50"
+                    className="flex items-center justify-between py-1.5 px-2 rounded-md bg-surface-hover/50 hover:bg-surface-hover transition-colors group"
                   >
-                    <span className="text-sm font-medium">{sub.name}</span>
-                    <div className="flex items-center gap-4">
-                      <span className="text-sm text-muted-foreground">
+                    <span className="text-[12px] font-medium text-text-primary capitalize">
+                      {sub.name}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-semibold text-text-secondary tabular-nums">
                         {formatCurrency(sub.spent)}
                       </span>
-                      <div className="flex gap-1">
+                      <div className="flex opacity-0 group-hover:opacity-100 transition-opacity">
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-6 w-6"
+                          className="h-5 w-5 text-text-muted hover:text-text-primary"
                           onClick={() => onEditSubcategory(category.id, sub)}
                         >
                           <Edit2 className="h-3 w-3" />
@@ -142,7 +164,7 @@ export function CategoryCard({
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-6 w-6 text-red-500 hover:text-red-600"
+                          className="h-5 w-5 text-text-muted hover:text-status-error"
                           onClick={() =>
                             onDeleteSubcategory(category.id, sub.id)
                           }
@@ -154,7 +176,7 @@ export function CategoryCard({
                   </div>
                 ))}
                 {category.subcategories.length === 0 && (
-                  <p className="text-sm text-muted-foreground text-center py-2">
+                  <p className="text-[11px] text-text-muted text-center py-2 font-medium">
                     Nenhuma subcategoria ainda.
                   </p>
                 )}

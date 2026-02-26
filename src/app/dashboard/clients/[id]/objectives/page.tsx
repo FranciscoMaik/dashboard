@@ -69,10 +69,6 @@ export default function ClientObjectivesPage() {
     }
   };
 
-  const shortTerm = objectives.filter((o) => o.type === "short");
-  const mediumTerm = objectives.filter((o) => o.type === "medium");
-  const longTerm = objectives.filter((o) => o.type === "long");
-
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -82,13 +78,10 @@ export default function ClientObjectivesPage() {
         </Button>
       </div>
 
-      {/* Short Term */}
-      <section className="space-y-4">
-        <h3 className="text-xl font-semibold border-b pb-2">
-          Curto Prazo (0-2 Anos)
-        </h3>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {shortTerm.map((obj) => (
+      {/* Objectives Grid */}
+      <section>
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {objectives.map((obj) => (
             <ObjectiveCard
               key={obj.id}
               objective={obj}
@@ -96,54 +89,12 @@ export default function ClientObjectivesPage() {
               onDelete={handleDelete}
             />
           ))}
-          {shortTerm.length === 0 && (
-            <p className="text-muted-foreground text-sm">
-              Nenhum objetivo de curto prazo.
-            </p>
-          )}
-        </div>
-      </section>
-
-      {/* Medium Term */}
-      <section className="space-y-4">
-        <h3 className="text-xl font-semibold border-b pb-2">
-          Médio Prazo (2-5 Anos)
-        </h3>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {mediumTerm.map((obj) => (
-            <ObjectiveCard
-              key={obj.id}
-              objective={obj}
-              onClick={handleEdit}
-              onDelete={handleDelete}
-            />
-          ))}
-          {mediumTerm.length === 0 && (
-            <p className="text-muted-foreground text-sm">
-              Nenhum objetivo de médio prazo.
-            </p>
-          )}
-        </div>
-      </section>
-
-      {/* Long Term */}
-      <section className="space-y-4">
-        <h3 className="text-xl font-semibold border-b pb-2">
-          Longo Prazo (5+ Anos)
-        </h3>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {longTerm.map((obj) => (
-            <ObjectiveCard
-              key={obj.id}
-              objective={obj}
-              onClick={handleEdit}
-              onDelete={handleDelete}
-            />
-          ))}
-          {longTerm.length === 0 && (
-            <p className="text-muted-foreground text-sm">
-              Nenhum objetivo de longo prazo.
-            </p>
+          {objectives.length === 0 && (
+            <div className="col-span-full py-12 text-center text-text-secondary bg-surface-card rounded-2xl border border-border-default border-dashed">
+              <p className="text-sm">
+                Nenhum objetivo cadastrado para este cliente.
+              </p>
+            </div>
           )}
         </div>
       </section>

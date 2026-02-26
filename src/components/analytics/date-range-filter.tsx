@@ -20,7 +20,7 @@ const periods: { label: string; value: Period }[] = [
 
 export function DateRangeFilter({ selected, onSelect }: DateRangeFilterProps) {
   return (
-    <div className="flex items-center space-x-2 bg-muted/30 p-1 rounded-lg">
+    <div className="flex items-center space-x-1 bg-surface-page p-1 rounded-card border border-border-subtle">
       {periods.map((period) => (
         <Button
           key={period.value}
@@ -28,9 +28,10 @@ export function DateRangeFilter({ selected, onSelect }: DateRangeFilterProps) {
           size="sm"
           onClick={() => onSelect(period.value)}
           className={cn(
-            "text-xs sm:text-sm transition-all",
-            selected === period.value &&
-              "bg-background shadow-sm text-foreground font-medium",
+            "text-xs sm:text-sm transition-all rounded-button",
+            selected === period.value
+              ? "bg-surface-card shadow-card text-text-primary font-medium"
+              : "text-text-muted hover:text-text-secondary",
           )}
         >
           {period.label}

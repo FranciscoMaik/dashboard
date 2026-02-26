@@ -66,21 +66,28 @@ export default function ClientsPage() {
     });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-screen-2xl mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <h2 className="text-3xl font-bold tracking-tight">Clientes</h2>
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight text-text-primary">
+            Clientes
+          </h2>
+          <p className="text-sm text-text-muted mt-1">
+            Gerencie seus clientes e portfólios
+          </p>
+        </div>
         <div className="flex items-center gap-2 w-full md:w-auto">
           <div className="relative w-full md:w-64">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-text-muted" />
             <Input
               placeholder="Buscar por nome ou email..."
-              className="pl-9"
+              className="pl-9 bg-surface-card border-border-default rounded-input text-text-primary shadow-sm focus-visible:ring-1 focus-visible:ring-accent-primary/20 focus-visible:border-accent-primary"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <Select value={sortOrder} onValueChange={setSortOrder}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[180px] bg-surface-card border-border-default rounded-input text-text-primary shadow-sm focus:ring-1 focus:ring-accent-primary/20 focus:border-accent-primary">
               <SelectValue placeholder="Ordenar por" />
             </SelectTrigger>
             <SelectContent>
@@ -98,7 +105,7 @@ export default function ClientsPage() {
         ))}
       </div>
       {filteredClients.length === 0 && (
-        <div className="text-center text-muted-foreground py-10">
+        <div className="text-center text-text-muted py-10 border border-border-subtle border-dashed rounded-card bg-surface-card shadow-sm">
           Nenhum cliente encontrado com sua busca.
         </div>
       )}

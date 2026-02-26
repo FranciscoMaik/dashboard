@@ -27,6 +27,12 @@ export const getClientData = (id: string) => {
       id === "1" ? "João Silva" : id === "2" ? "Maria Santos" : "Cliente " + id,
     email: `cliente${id}@exemplo.com`,
     phone: "+55 (11) 99999-1234",
+    cpf:
+      id === "1"
+        ? "123.456.789-00"
+        : id === "2"
+          ? "987.654.321-00"
+          : "111.222.333-44",
     lastLogin: "há 2 horas",
     createdAt: "15 Jan, 2024",
     age: 34,
@@ -107,6 +113,7 @@ export interface Transaction {
   type: "income" | "expense";
   category: string;
   subcategory: string;
+  bank?: string;
   ignored: boolean;
 }
 
@@ -121,6 +128,15 @@ export const getTransactions = (clientId: string): Transaction[] => {
     const date = new Date();
     date.setDate(date.getDate() - Math.floor(Math.random() * 90)); // Last 90 days
 
+    const banks = [
+      "Nubank",
+      "Itaú",
+      "XP Investimentos",
+      "Bradesco",
+      "Banco do Brasil",
+    ];
+    const randomBank = banks[Math.floor(Math.random() * banks.length)];
+
     return {
       id: `trans_${i}`,
       date: date.toISOString().split("T")[0],
@@ -129,6 +145,7 @@ export const getTransactions = (clientId: string): Transaction[] => {
       type: isExpense ? "expense" : "income",
       category: isExpense ? "Alimentação" : "Renda",
       subcategory: isExpense ? "Mercado" : "Salário",
+      bank: randomBank,
       ignored: Math.random() > 0.95, // 5% ignored
     };
   });

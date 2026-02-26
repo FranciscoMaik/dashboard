@@ -1,3 +1,4 @@
+import { Card } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -12,12 +13,10 @@ import type { AssetType } from "./asset-class-cards";
 export interface Asset {
   id: string;
   type: AssetType;
-  // Fixed Income Props
   name?: string;
   netValue?: number;
   grossValue?: number;
   maturity?: string;
-  // Variable/REITs Props
   ticker?: string;
   quantity?: number;
   totalValue?: number;
@@ -34,27 +33,40 @@ export function AssetTable({ type, assets }: AssetTableProps) {
 
   if (type === "fixed") {
     return (
-      <div className="rounded-md border">
+      <Card className="overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="bg-secondary hover:bg-secondary">
-              <TableHead>Nome do Ativo</TableHead>
-              <TableHead>Vencimento</TableHead>
-              <TableHead className="text-right">Valor Bruto</TableHead>
-              <TableHead className="text-right">Valor Líquido</TableHead>
+            <TableRow className="border-b border-border-subtle hover:bg-transparent">
+              <TableHead className="text-text-muted text-xs uppercase tracking-wide">
+                Nome do Ativo
+              </TableHead>
+              <TableHead className="text-text-muted text-xs uppercase tracking-wide">
+                Vencimento
+              </TableHead>
+              <TableHead className="text-right text-text-muted text-xs uppercase tracking-wide">
+                Valor Bruto
+              </TableHead>
+              <TableHead className="text-right text-text-muted text-xs uppercase tracking-wide">
+                Valor Líquido
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredAssets.map((asset) => (
-              <TableRow key={asset.id}>
-                <TableCell className="font-medium">{asset.name}</TableCell>
-                <TableCell>
-                  {asset.maturity ? formatDate(asset.maturity) : "-"}
+              <TableRow
+                key={asset.id}
+                className="border-b border-border-subtle hover:bg-surface-hover transition-colors"
+              >
+                <TableCell className="font-medium text-sm text-text-primary py-4">
+                  {asset.name}
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell className="text-sm text-text-secondary py-4">
+                  {asset.maturity ? formatDate(asset.maturity) : "—"}
+                </TableCell>
+                <TableCell className="text-right text-sm text-text-secondary tabular-nums py-4">
                   {formatCurrency(asset.grossValue || 0)}
                 </TableCell>
-                <TableCell className="text-right font-bold text-green-600 dark:text-green-400">
+                <TableCell className="text-right font-semibold text-sm text-accent-primary tabular-nums py-4">
                   {formatCurrency(asset.netValue || 0)}
                 </TableCell>
               </TableRow>
@@ -63,7 +75,7 @@ export function AssetTable({ type, assets }: AssetTableProps) {
               <TableRow>
                 <TableCell
                   colSpan={4}
-                  className="text-center py-4 text-muted-foreground"
+                  className="text-center py-8 text-text-muted text-sm"
                 >
                   Nenhum ativo de renda fixa encontrado.
                 </TableCell>
@@ -71,29 +83,45 @@ export function AssetTable({ type, assets }: AssetTableProps) {
             )}
           </TableBody>
         </Table>
-      </div>
+      </Card>
     );
   }
 
-  // Variable or REITs
   return (
-    <div className="rounded-md border">
+    <Card className="overflow-hidden">
       <Table>
         <TableHeader>
-          <TableRow className="bg-secondary hover:bg-secondary">
-            <TableHead>Ticker</TableHead>
-            <TableHead>Setor</TableHead>
-            <TableHead className="text-right">Quantidade</TableHead>
-            <TableHead className="text-right">Valor Total</TableHead>
+          <TableRow className="border-b border-border-subtle hover:bg-transparent">
+            <TableHead className="text-text-muted text-xs uppercase tracking-wide">
+              Ticker
+            </TableHead>
+            <TableHead className="text-text-muted text-xs uppercase tracking-wide">
+              Setor
+            </TableHead>
+            <TableHead className="text-right text-text-muted text-xs uppercase tracking-wide">
+              Quantidade
+            </TableHead>
+            <TableHead className="text-right text-text-muted text-xs uppercase tracking-wide">
+              Valor Total
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {filteredAssets.map((asset) => (
-            <TableRow key={asset.id}>
-              <TableCell className="font-medium">{asset.ticker}</TableCell>
-              <TableCell>{asset.sector}</TableCell>
-              <TableCell className="text-right">{asset.quantity}</TableCell>
-              <TableCell className="text-right font-bold text-green-600 dark:text-green-400">
+            <TableRow
+              key={asset.id}
+              className="border-b border-border-subtle hover:bg-surface-hover transition-colors"
+            >
+              <TableCell className="font-semibold text-sm text-text-primary py-4">
+                {asset.ticker}
+              </TableCell>
+              <TableCell className="text-sm text-text-secondary py-4">
+                {asset.sector}
+              </TableCell>
+              <TableCell className="text-right text-sm text-text-secondary tabular-nums py-4">
+                {asset.quantity}
+              </TableCell>
+              <TableCell className="text-right font-semibold text-sm text-accent-primary tabular-nums py-4">
                 {formatCurrency(asset.totalValue || 0)}
               </TableCell>
             </TableRow>
@@ -102,7 +130,7 @@ export function AssetTable({ type, assets }: AssetTableProps) {
             <TableRow>
               <TableCell
                 colSpan={4}
-                className="text-center py-4 text-muted-foreground"
+                className="text-center py-8 text-text-muted text-sm"
               >
                 Nenhum ativo encontrado.
               </TableCell>
@@ -110,6 +138,6 @@ export function AssetTable({ type, assets }: AssetTableProps) {
           )}
         </TableBody>
       </Table>
-    </div>
+    </Card>
   );
 }
