@@ -6,6 +6,7 @@ import {
   Layers,
   LayoutDashboard,
   LogOut,
+  MessageSquare,
   PieChart,
   Target,
   TrendingUp,
@@ -25,6 +26,11 @@ const advisorItems = [
     title: "Visão Geral", // Overview
     href: "/dashboard",
     icon: LayoutDashboard,
+  },
+  {
+    title: "Feedbacks",
+    href: "/dashboard/feedbacks",
+    icon: MessageSquare,
   },
   {
     title: "Clientes", // Clients
