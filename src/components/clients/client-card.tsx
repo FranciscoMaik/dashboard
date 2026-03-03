@@ -1,4 +1,4 @@
-import { ChevronRight, Mail, Phone } from "lucide-react";
+import { Calendar, ChevronRight, IdCard, Mail, Phone } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +19,8 @@ interface ClientCardProps {
   hasOpenFinance?: boolean;
   hasB3?: boolean;
   hasLifePlan?: boolean;
+  cpf?: string;
+  createdAt?: string;
 }
 
 export function ClientCard({
@@ -29,6 +31,8 @@ export function ClientCard({
   hasOpenFinance,
   hasB3,
   hasLifePlan,
+  cpf,
+  createdAt,
 }: ClientCardProps) {
   return (
     <Card className="bg-surface-card rounded-card shadow-card hover:shadow-hover border-none transition-all duration-300">
@@ -61,6 +65,18 @@ export function ClientCard({
           <Phone className="h-3.5 w-3.5 shrink-0" />
           <span className="truncate">{phone}</span>
         </div>
+        {cpf && (
+          <div className="flex items-center gap-2.5">
+            <IdCard className="h-3.5 w-3.5 shrink-0" />
+            <span className="truncate">{cpf}</span>
+          </div>
+        )}
+        {createdAt && (
+          <div className="flex items-center gap-2.5">
+            <Calendar className="h-3.5 w-3.5 shrink-0" />
+            <span className="truncate">Criado em {createdAt}</span>
+          </div>
+        )}
         <div className="flex flex-wrap gap-1.5 mt-5 w-full items-center justify-end min-h-[24px]">
           {hasOpenFinance && (
             <Badge className="bg-surface-page border border-border-default text-text-secondary rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-wide uppercase hover:bg-surface-hover">
