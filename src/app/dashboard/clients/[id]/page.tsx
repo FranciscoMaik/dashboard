@@ -374,7 +374,10 @@ export default async function ClientProfilePage({
         {/* Right Column — Activity & Access */}
         <div className="space-y-6">
           {/* Most Accessed Screens */}
-          <MostAccessedScreens />
+          <MostAccessedScreens
+            clientName={client.name}
+            screens={client.name === "Cliente 4" ? [] : undefined}
+          />
 
           {/* Quick Actions */}
           <Card>

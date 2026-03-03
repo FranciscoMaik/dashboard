@@ -21,6 +21,7 @@ const mockAuditUsers = [
     totalPlRef: 45000000.0,
     totalSearches: 134,
     lastConsultation: "Hoje às 14:32",
+    accessLevel: "Master",
   },
   {
     id: "usr002",
@@ -29,6 +30,7 @@ const mockAuditUsers = [
     totalPlRef: 12500000.5,
     totalSearches: 45,
     lastConsultation: "Ontem às 18:15",
+    accessLevel: "Avançado",
   },
   {
     id: "usr003",
@@ -37,6 +39,7 @@ const mockAuditUsers = [
     totalPlRef: 89000000.0,
     totalSearches: 412,
     lastConsultation: "Hoje às 09:10",
+    accessLevel: "Avançado",
   },
   {
     id: "usr004",
@@ -45,6 +48,7 @@ const mockAuditUsers = [
     totalPlRef: 0,
     totalSearches: 0,
     lastConsultation: "Nenhuma pesquisa",
+    accessLevel: "Padrão",
   },
 ];
 

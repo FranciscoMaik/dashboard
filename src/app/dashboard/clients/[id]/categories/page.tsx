@@ -13,7 +13,7 @@ const mockCategories = [
   {
     id: "1",
     name: "Alimentação",
-    limit: 2000,
+    limit: 0,
     spent: 1850.5,
     subcategories: [
       { id: "1a", name: "Supermercado", spent: 1200 },

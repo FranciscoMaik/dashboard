@@ -49,18 +49,28 @@ export function CategoryCard({
   onEditSubcategory,
   onDeleteSubcategory,
 }: CategoryCardProps) {
-  const percentage = Math.min((category.spent / category.limit) * 100, 100);
-  const isOverLimit = category.spent > category.limit;
+  const hasLimit = category.limit > 0;
+  const percentage = hasLimit
+    ? Math.min((category.spent / category.limit) * 100, 100)
+    : 0;
+  const isOverLimit = hasLimit && category.spent > category.limit;
 
   return (
     <div className="rounded-2xl bg-surface-card text-text-primary shadow-card hover:shadow-card-hover transition-all duration-300">
       <div className="p-4 pb-2">
         <div className="flex items-start justify-between mb-3">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col items-start gap-1">
             <h3 className="font-semibold text-base tracking-tight text-text-primary">
               {category.name}
             </h3>
-            {isOverLimit ? (
+            {!hasLimit ? (
+              <Badge
+                variant="outline"
+                className="bg-surface-hover text-text-secondary border-border-default text-[10px] px-1.5 py-0 font-medium whitespace-nowrap"
+              >
+                Sem limite cadastrado
+              </Badge>
+            ) : isOverLimit ? (
               <Badge variant="destructive" className="text-[10px] px-1.5 py-0">
                 Acima
               </Badge>
@@ -79,7 +89,7 @@ export function CategoryCard({
                 {formatCurrency(category.spent)}
               </strong>
               <span className="text-[10px] uppercase tracking-wider">
-                / {formatCurrency(category.limit)}
+                {hasLimit ? `/ ${formatCurrency(category.limit)}` : "Uso Atual"}
               </span>
             </span>
             <DropdownMenu>
@@ -113,16 +123,30 @@ export function CategoryCard({
         </div>
 
         <div className="space-y-1 mb-2">
-          <Progress
-            value={percentage}
-            className={`h-1.5 bg-surface-hover overflow-hidden rounded-full`}
-            indicatorClassName={
-              isOverLimit ? "bg-status-error" : "bg-accent-primary"
-            }
-          />
-          <p className="text-[10px] text-text-muted font-medium text-right uppercase tracking-wider">
-            {percentage.toFixed(0)}% Utilizado
-          </p>
+          {hasLimit ? (
+            <>
+              <Progress
+                value={percentage}
+                className={`h-1.5 bg-surface-hover overflow-hidden rounded-full`}
+                indicatorClassName={
+                  isOverLimit ? "bg-status-error" : "bg-accent-primary"
+                }
+              />
+              <p className="text-[10px] text-text-muted font-medium text-right uppercase tracking-wider">
+                {percentage.toFixed(0)}% Utilizado
+              </p>
+            </>
+          ) : (
+            <>
+              <Progress
+                value={0}
+                className={`h-1.5 bg-surface-hover overflow-hidden rounded-full opacity-40`}
+              />
+              <p className="text-[10px] text-text-muted/60 font-medium text-right uppercase tracking-wider">
+                Progresso Inativo
+              </p>
+            </>
+          )}
         </div>
       </div>
 

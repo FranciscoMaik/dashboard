@@ -17,6 +17,7 @@ interface AuditUserCardProps {
   totalPlRef: number;
   totalSearches: number;
   lastConsultation: string;
+  accessLevel?: string;
 }
 
 export function AuditUserCard({
@@ -26,13 +27,14 @@ export function AuditUserCard({
   totalPlRef,
   totalSearches,
   lastConsultation,
+  accessLevel = "Padrão",
 }: AuditUserCardProps) {
   return (
     <Card className="bg-surface-card rounded-card shadow-card hover:shadow-hover border-none transition-all duration-300">
       <CardHeader>
         <div className="flex justify-between items-start">
           <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10 ring-1 ring-border-default ring-offset-2 ring-offset-surface-card">
+            <Avatar className="h-10 w-10 ring-1 ring-border-default ring-offset-2 ring-offset-surface-card shrink-0">
               <AvatarImage src="" />
               <AvatarFallback className="bg-accent-subtle text-accent-primary font-semibold text-sm">
                 {name
@@ -43,9 +45,14 @@ export function AuditUserCard({
                   .toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <CardTitle className="text-lg font-semibold tracking-tight text-text-primary">
-              {name}
-            </CardTitle>
+            <div className="flex flex-col gap-1 items-start">
+              <CardTitle className="text-lg font-semibold tracking-tight text-text-primary">
+                {name}
+              </CardTitle>
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase border bg-surface-hover text-text-secondary border-border-default">
+                {accessLevel}
+              </span>
+            </div>
           </div>
         </div>
       </CardHeader>
