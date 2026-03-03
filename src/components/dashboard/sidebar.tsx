@@ -1,13 +1,18 @@
 "use client";
 
 import {
+  BrainCircuit,
   ChevronLeft,
   ChevronRight,
   Layers,
   LayoutDashboard,
+  LineChart,
   LogOut,
   Megaphone,
   MessageSquare,
+  PieChart,
+  SearchCode,
+  ShieldAlert,
   Target,
   TrendingUp,
   User,
@@ -41,6 +46,11 @@ const advisorItems = [
     title: "Campanhas",
     href: "/dashboard/campaigns",
     icon: Megaphone,
+  },
+  {
+    title: "Auditoria",
+    href: "/dashboard/audit",
+    icon: ShieldAlert,
   },
 ];
 
@@ -85,19 +95,53 @@ const getClientItems = (clientId: string) => {
   return items;
 };
 
+const getAuditItems = (auditId: string) => {
+  return [
+    {
+      title: "Visualização de PL",
+      href: `/dashboard/audit/${auditId}/balance`,
+      icon: PieChart,
+    },
+    {
+      title: "Análise Financeira",
+      href: `/dashboard/audit/${auditId}/analysis`,
+      icon: LineChart,
+    },
+    {
+      title: "Análise de IA",
+      href: `/dashboard/audit/${auditId}/ai`,
+      icon: BrainCircuit,
+    },
+    {
+      title: "Consulta de Listagens",
+      href: `/dashboard/audit/${auditId}/listings`,
+      icon: SearchCode,
+    },
+  ];
+};
+
 export function Sidebar() {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Check if we are in a client context
   const clientMatch = pathname.match(/^\/dashboard\/clients\/([^/]+)/);
-  const isClientContext = !!clientMatch;
+  const isClientContext = !!clientMatch && pathname !== "/dashboard/clients";
   const clientId = clientMatch ? clientMatch[1] : null;
 
   const client = clientId ? getClientData(clientId) : null;
 
+  // Check if we are in an audit user context
+  const auditMatch = pathname.match(/^\/dashboard\/audit\/([^/]+)/);
+  const isAuditContext = !!auditMatch && pathname !== "/dashboard/audit";
+  const auditId = auditMatch ? auditMatch[1] : null;
+
   const items =
-    isClientContext && clientId ? getClientItems(clientId) : advisorItems;
+    isClientContext && clientId
+      ? getClientItems(clientId)
+      : isAuditContext && auditId
+        ? getAuditItems(auditId)
+        : advisorItems;
 
   return (
     <div
@@ -154,6 +198,7 @@ export function Sidebar() {
       )}
 
       <div className="flex-1 overflow-auto py-4 custom-scrollbar">
+        {/* Client Context Header */}
         {isClientContext && !isCollapsed && client && (
           <div className="px-4 mb-4 space-y-4">
             <Link href="/dashboard/clients">
@@ -178,6 +223,33 @@ export function Sidebar() {
             </div>
           </div>
         )}
+
+        {/* Audit Context Header */}
+        {isAuditContext && !isCollapsed && auditId && (
+          <div className="px-4 mb-4 space-y-4">
+            <Link href="/dashboard/audit">
+              <Button className="w-full gap-2 rounded-button bg-surface-page border border-border-default text-text-secondary hover:text-text-primary hover:bg-surface-hover shadow-none transition-colors h-9">
+                <ChevronLeft className="h-3 w-3" />
+                Voltar para Auditoria
+              </Button>
+            </Link>
+
+            <div className="flex items-center gap-3 bg-surface-page px-3 py-2.5 rounded-card border border-border-subtle">
+              <div className="flex shrink-0 h-8 w-8 items-center justify-center rounded-full bg-accent-subtle">
+                <ShieldAlert className="h-4 w-4 text-accent-primary" />
+              </div>
+              <div className="flex flex-col overflow-hidden">
+                <span className="text-[10px] uppercase tracking-wide text-text-muted font-semibold">
+                  Usuário Auditado
+                </span>
+                <span className="text-sm font-bold text-text-primary truncate tracking-tight">
+                  ID: {auditId}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
         <nav className="grid items-start px-3 text-sm font-medium gap-1">
           {items.map((item) => {
             const Icon = item.icon;
