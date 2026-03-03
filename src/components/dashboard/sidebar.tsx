@@ -6,8 +6,8 @@ import {
   Layers,
   LayoutDashboard,
   LogOut,
+  Megaphone,
   MessageSquare,
-  PieChart,
   Target,
   TrendingUp,
   User,
@@ -36,6 +36,11 @@ const advisorItems = [
     title: "Clientes", // Clients
     href: "/dashboard/clients",
     icon: Users,
+  },
+  {
+    title: "Campanhas",
+    href: "/dashboard/campaigns",
+    icon: Megaphone,
   },
 ];
 
