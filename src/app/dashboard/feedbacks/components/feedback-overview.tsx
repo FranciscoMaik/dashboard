@@ -1,7 +1,28 @@
+"use client";
+
 import { Clock, ThumbsUp } from "lucide-react";
+import { useTheme } from "next-themes";
+import {
+  Bar,
+  BarChart,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { Card } from "@/components/ui/card";
 
+const sentimentData = [
+  { name: "Bons", count: 112, fill: "#1d63dd" },
+  { name: "Médios", count: 22, fill: "#1d63dd80" },
+  { name: "Ruins", count: 8, fill: "#1d63dd26" },
+];
+
 export function FeedbackOverview() {
+  const { theme } = useTheme();
+  const textColor = theme === "dark" ? "#a1a1aa" : "#71717a";
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Sentiment Distribution - Central Stage emphasis */}
@@ -20,120 +41,57 @@ export function FeedbackOverview() {
           </div>
         </div>
 
-        {/* Custom SVG Narrative Diagram - "Cartography of Sentiment" */}
-        <div className="flex-1 w-full relative -mt-4">
-          <svg
-            className="w-full h-full"
-            viewBox="0 0 600 200"
-            preserveAspectRatio="none"
-            role="img"
-            aria-label="Gráfico de Barras de Distribuição de Sentimento"
-          >
-            <title>Distribuição de Sentimento</title>
-
-            {/* Subtle Guidelines */}
-            <path
-              d="M 0 50 L 600 50 M 0 100 L 600 100 M 0 150 L 600 150"
-              stroke="currentColor"
-              className="text-border-subtle"
-              strokeWidth="1"
-              strokeDasharray="4 4"
-              fill="none"
-            />
-
-            {/* Base line */}
-            <path
-              d="M 0 200 L 600 200"
-              stroke="currentColor"
-              className="text-border-subtle"
-              strokeWidth="1"
-              fill="none"
-            />
-
-            {/* Bar: Bons */}
-            <g className="group/bar transition-all duration-300 cursor-default">
-              <rect x="80" y="0" width="100" height="200" fill="transparent" />
-              <rect
-                x="110"
-                y="40"
-                width="40"
-                height="160"
-                fill="#1d63dd"
-                rx="4"
-                className="transition-all duration-500 group-hover/bar:fill-accent-hover"
+        {/* Recharts Bar Chart */}
+        <div className="flex-1 w-full relative mt-4 min-h-0">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={sentimentData}
+              margin={{ top: 20, right: 30, left: -20, bottom: 0 }}
+            >
+              <XAxis
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: textColor, fontSize: 13, fontWeight: 600 }}
+                dy={10}
               />
-              <text
-                x="130"
-                y="25"
-                fill="#18181B"
-                fontSize="15"
-                fontWeight="bold"
-                textAnchor="middle"
-                className="opacity-0 group-hover/bar:opacity-100 transition-opacity duration-300"
-              >
-                112
-              </text>
-            </g>
-
-            {/* Bar: Médios */}
-            <g className="group/bar transition-all duration-300 cursor-default">
-              <rect x="250" y="0" width="100" height="200" fill="transparent" />
-              <rect
-                x="280"
-                y="140"
-                width="40"
-                height="60"
-                fill="#1d63dd"
-                fillOpacity="0.5"
-                rx="4"
-                className="transition-all duration-500 group-hover/bar:fillOpacity-100 group-hover/bar:fill-accent-hover"
+              <YAxis hide />
+              <Tooltip
+                cursor={{ fill: "transparent" }}
+                content={({ active, payload, label }) => {
+                  if (active && payload && payload.length) {
+                    return (
+                      <div className="bg-surface-elevated border border-border-default shadow-float px-3 py-2 rounded-card">
+                        <p className="text-xs font-semibold text-text-muted mb-1">
+                          {label}
+                        </p>
+                        <p className="font-bold text-text-primary text-sm flex items-center gap-2">
+                          <span
+                            className="w-2 h-2 rounded-full"
+                            style={{ backgroundColor: payload[0].payload.fill }}
+                          />
+                          {payload[0].value} feedbacks
+                        </p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
               />
-              <text
-                x="300"
-                y="125"
-                fill="#18181B"
-                fontSize="15"
-                fontWeight="bold"
-                textAnchor="middle"
-                className="opacity-0 group-hover/bar:opacity-100 transition-opacity duration-300"
-              >
-                22
-              </text>
-            </g>
-
-            {/* Bar: Ruins */}
-            <g className="group/bar transition-all duration-300 cursor-default">
-              <rect x="420" y="0" width="100" height="200" fill="transparent" />
-              <rect
-                x="450"
-                y="175"
-                width="40"
-                height="25"
-                fill="#1d63dd"
-                fillOpacity="0.15"
-                rx="4"
-                className="transition-all duration-500 group-hover/bar:fillOpacity-100 group-hover/bar:fill-accent-hover"
-              />
-              <text
-                x="470"
-                y="160"
-                fill="#18181B"
-                fontSize="15"
-                fontWeight="bold"
-                textAnchor="middle"
-                className="opacity-0 group-hover/bar:opacity-100 transition-opacity duration-300"
-              >
-                8
-              </text>
-            </g>
-          </svg>
-        </div>
-
-        {/* Labels underneath */}
-        <div className="flex justify-between w-full mt-2 px-12 md:px-24 text-[13px] font-semibold tracking-wide text-text-secondary z-10">
-          <span>Bons</span>
-          <span>Médios</span>
-          <span>Ruins</span>
+              <Bar dataKey="count" radius={[4, 4, 0, 0]} maxBarSize={60}>
+                {sentimentData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${
+                      // biome-ignore lint/suspicious/noArrayIndexKey: the sentiment data order is static
+                      index
+                    }`}
+                    fill={entry.fill}
+                    className="transition-all duration-300 hover:opacity-80 cursor-pointer"
+                  />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </Card>
 
