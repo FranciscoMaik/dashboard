@@ -34,7 +34,7 @@ export function BankDistributionCharts() {
       <Card>
         <CardHeader>
           <CardTitle className="text-sm font-medium">
-            Crédito por Banco
+            Crédito por Banco (R$)
           </CardTitle>
         </CardHeader>
         <CardContent>
