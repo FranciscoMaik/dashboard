@@ -34,7 +34,7 @@ const RANK_STYLES: Record<number, { badge: string; label: string }> = {
 };
 
 export function TopTransactionsRanking({ data }: TopTransactionsRankingProps) {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   const ranked = [...data]
     .filter((t) => !t.ignored)

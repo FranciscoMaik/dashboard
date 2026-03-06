@@ -4,6 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import type { DateRange } from "react-day-picker";
 import { AnalyticsSummary } from "@/components/analytics/analytics-summary";
 import { ConnectedBanks } from "@/components/analytics/connected-banks";
 import {
@@ -13,7 +14,6 @@ import {
 import { EvolutionChart } from "@/components/analytics/evolution-chart";
 import { TopExpensesChart } from "@/components/analytics/top-expenses-chart";
 import { TopTransactionsRanking } from "@/components/analytics/top-transactions-ranking";
-import { TransactionNavigator } from "@/components/analytics/transaction-navigator";
 import { Button } from "@/components/ui/button";
 import type { Transaction } from "@/lib/mock-data";
 import { getClientData } from "@/lib/mock-data";
@@ -34,12 +34,12 @@ const MOCK_SUMMARY = {
     deposits: 1200,
     withdrawals: 500,
   },
-  "1W": {
-    revenues: 3500,
-    expenses: 2100,
-    balance: 1400,
-    deposits: 0,
-    withdrawals: 100,
+  CUSTOM: {
+    revenues: 12000,
+    expenses: 9000,
+    balance: 3000,
+    deposits: 1000,
+    withdrawals: 200,
   },
   "6M": {
     revenues: 90000,
@@ -58,108 +58,6 @@ const MOCK_SUMMARY = {
 };
 
 const MOCK_TOP_TRANSACTIONS: Record<Period, Transaction[]> = {
-  "1W": [
-    {
-      id: "tr_w1",
-      date: "2026-02-23",
-      name: "Aluguel Apartamento",
-      amount: 3500,
-      type: "expense",
-      category: "Habitação",
-      subcategory: "Aluguel",
-      ignored: false,
-    },
-    {
-      id: "tr_w2",
-      date: "2026-02-22",
-      name: "Salário Mensal",
-      amount: 8500,
-      type: "income",
-      category: "Renda",
-      subcategory: "Salário",
-      ignored: false,
-    },
-    {
-      id: "tr_w3",
-      date: "2026-02-21",
-      name: "Supermercado Extra",
-      amount: 890,
-      type: "expense",
-      category: "Alimentação",
-      subcategory: "Mercado",
-      ignored: false,
-    },
-    {
-      id: "tr_w4",
-      date: "2026-02-20",
-      name: "Posto Shell",
-      amount: 320,
-      type: "expense",
-      category: "Transporte",
-      subcategory: "Combustível",
-      ignored: false,
-    },
-    {
-      id: "tr_w5",
-      date: "2026-02-19",
-      name: "Freelance Design",
-      amount: 2200,
-      type: "income",
-      category: "Renda",
-      subcategory: "Freelance",
-      ignored: false,
-    },
-    {
-      id: "tr_w6",
-      date: "2026-02-18",
-      name: "Restaurante Outback",
-      amount: 280,
-      type: "expense",
-      category: "Alimentação",
-      subcategory: "Restaurantes",
-      ignored: false,
-    },
-    {
-      id: "tr_w7",
-      date: "2026-02-18",
-      name: "Netflix",
-      amount: 55,
-      type: "expense",
-      category: "Lazer",
-      subcategory: "Streaming",
-      ignored: false,
-    },
-    {
-      id: "tr_w8",
-      date: "2026-02-17",
-      name: "Uber",
-      amount: 45,
-      type: "expense",
-      category: "Transporte",
-      subcategory: "Uber/Táxi",
-      ignored: false,
-    },
-    {
-      id: "tr_w9",
-      date: "2026-02-17",
-      name: "Farmácia Drogasil",
-      amount: 175,
-      type: "expense",
-      category: "Saúde",
-      subcategory: "Farmácia",
-      ignored: false,
-    },
-    {
-      id: "tr_w10",
-      date: "2026-02-17",
-      name: "Padaria Dona Flor",
-      amount: 62,
-      type: "expense",
-      category: "Alimentação",
-      subcategory: "Padaria",
-      ignored: false,
-    },
-  ],
   "1M": [
     {
       id: "tr_m1",
@@ -466,6 +364,18 @@ const MOCK_TOP_TRANSACTIONS: Record<Period, Transaction[]> = {
       ignored: false,
     },
   ],
+  CUSTOM: [
+    {
+      id: "tr_cus1",
+      date: "2026-03-01",
+      name: "Compra Personalizada",
+      amount: 1500,
+      type: "expense",
+      category: "Compras",
+      subcategory: "Diversos",
+      ignored: false,
+    },
+  ],
   "12M": [
     {
       id: "tr_12m1",
@@ -595,13 +505,13 @@ const MOCK_TOP_EXPENSES = [
 export default function ClientAnalysisPage() {
   const params = useParams();
   const [selectedPeriod, setSelectedPeriod] = useState<Period>("3M");
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
 
   const client = getClientData(params.id as string);
 
   const summaryData = MOCK_SUMMARY[selectedPeriod] || MOCK_SUMMARY["3M"];
 
-  const chartData =
-    selectedPeriod === "1W" ? MOCK_EVOLUTION.slice(-1) : MOCK_EVOLUTION;
+  const chartData = MOCK_EVOLUTION;
 
   return (
     <div className="space-y-8">
@@ -620,6 +530,8 @@ export default function ClientAnalysisPage() {
           <DateRangeFilter
             selected={selectedPeriod}
             onSelect={setSelectedPeriod}
+            dateRange={dateRange}
+            onDateRangeChange={setDateRange}
           />
           <Button
             variant="outline"
@@ -655,12 +567,6 @@ export default function ClientAnalysisPage() {
           data={
             MOCK_TOP_TRANSACTIONS[selectedPeriod] || MOCK_TOP_TRANSACTIONS["3M"]
           }
-        />
-
-        {/* Transaction Drill-down */}
-        <TransactionNavigator
-          clientId={params.id as string}
-          period={selectedPeriod}
         />
       </div>
     </div>

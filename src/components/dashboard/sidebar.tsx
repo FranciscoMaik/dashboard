@@ -1,7 +1,9 @@
 "use client";
 
 import {
+  ArrowRightLeft,
   BrainCircuit,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Layers,
@@ -21,12 +23,24 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import type { ElementType } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { getClientData } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 
-const advisorItems = [
+type NavItem = {
+  title: string;
+  href?: string;
+  icon: ElementType;
+  submenu?: {
+    title: string;
+    href: string;
+    icon?: ElementType;
+  }[];
+};
+
+const advisorItems: NavItem[] = [
   {
     title: "Visão Geral", // Overview
     href: "/dashboard",
@@ -54,9 +68,9 @@ const advisorItems = [
   },
 ];
 
-const getClientItems = (clientId: string) => {
+const getClientItems = (clientId: string): NavItem[] => {
   const client = getClientData(clientId);
-  const items = [
+  const items: NavItem[] = [
     {
       title: "Dados Pessoais", // Personal Data
       href: `/dashboard/clients/${clientId}`,
@@ -70,18 +84,33 @@ const getClientItems = (clientId: string) => {
   ];
 
   if (client.hasOpenFinance) {
-    items.push(
-      {
-        title: "Análise Financeira", // Financial Analysis
-        href: `/dashboard/clients/${clientId}/analysis`,
-        icon: TrendingUp,
-      },
-      {
-        title: "Categorias", // Categories
-        href: `/dashboard/clients/${clientId}/categories`,
-        icon: Layers,
-      },
-    );
+    items.push({
+      title: "Análise Financeira", // Financial Analysis Group
+      icon: TrendingUp,
+      submenu: [
+        {
+          title: "Visão Geral",
+          href: `/dashboard/clients/${clientId}/analysis`,
+          icon: LineChart,
+        },
+        {
+          title: "Transações", // Transactions
+          href: `/dashboard/clients/${clientId}/transactions`,
+          icon: ArrowRightLeft,
+        },
+        {
+          title: "Análise de Categorias", // Category Analysis
+          href: `/dashboard/clients/${clientId}/category-analysis`,
+          icon: PieChart,
+        },
+      ],
+    });
+    // Base Categories
+    items.push({
+      title: "Categorias", // Categories
+      href: `/dashboard/clients/${clientId}/categories`,
+      icon: Layers,
+    });
   }
 
   if (client.hasB3) {
@@ -95,7 +124,7 @@ const getClientItems = (clientId: string) => {
   return items;
 };
 
-const getAuditItems = (auditId: string) => {
+const getAuditItems = (auditId: string): NavItem[] => {
   return [
     {
       title: "Visualização de PL",
@@ -119,6 +148,117 @@ const getAuditItems = (auditId: string) => {
     },
   ];
 };
+
+function NavGroup({
+  item,
+  pathname,
+  isSidebarCollapsed,
+  setSidebarExpanded,
+}: {
+  item: NavItem;
+  pathname: string;
+  isSidebarCollapsed: boolean;
+  setSidebarExpanded: () => void;
+}) {
+  const isAnyChildActive = item.submenu?.some((sub) => pathname === sub.href);
+  const [isOpen, setIsOpen] = useState(isAnyChildActive);
+
+  // keep open if child is active
+  useEffect(() => {
+    if (isAnyChildActive) setIsOpen(true);
+  }, [isAnyChildActive]);
+
+  const Icon = item.icon;
+
+  if (isSidebarCollapsed) {
+    return (
+      <Button
+        variant="ghost"
+        className={cn(
+          "w-full justify-center px-2 rounded-button h-10 transition-colors shadow-none mt-1",
+          isAnyChildActive
+            ? "bg-accent-subtle text-accent-primary"
+            : "text-text-secondary hover:bg-surface-hover hover:text-text-primary",
+        )}
+        title={item.title}
+        onClick={() => {
+          setSidebarExpanded();
+          setIsOpen(true);
+        }}
+      >
+        <Icon
+          className={cn(
+            "h-[18px] w-[18px] shrink-0",
+            isAnyChildActive ? "text-accent-primary" : "text-text-muted",
+          )}
+        />
+      </Button>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-1 mt-1">
+      <Button
+        variant="ghost"
+        className={cn(
+          "w-full justify-between items-center rounded-button h-10 transition-colors shadow-none",
+          isAnyChildActive
+            ? "text-accent-primary"
+            : "text-text-secondary hover:bg-surface-hover hover:text-text-primary",
+        )}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <div className="flex items-center gap-3">
+          <Icon
+            className={cn(
+              "h-[18px] w-[18px] shrink-0",
+              isAnyChildActive ? "text-accent-primary" : "text-text-muted",
+            )}
+          />
+          <span className="tracking-wide font-semibold">{item.title}</span>
+        </div>
+        <ChevronDown
+          className={cn(
+            "h-4 w-4 shrink-0 transition-transform duration-200 text-text-muted",
+            isOpen && "rotate-180",
+          )}
+        />
+      </Button>
+
+      {isOpen && (
+        <div className="flex flex-col gap-1 pl-9 mt-1">
+          {item.submenu?.map((sub) => {
+            const SubIcon = sub.icon;
+            const isActive = pathname === sub.href;
+            return (
+              <Link key={sub.href} href={sub.href}>
+                <Button
+                  variant="ghost"
+                  className={cn(
+                    "w-full justify-start gap-3 rounded-button h-9 transition-colors shadow-none text-xs",
+                    isActive
+                      ? "bg-accent-subtle text-accent-primary font-semibold"
+                      : "text-text-secondary hover:bg-surface-hover hover:text-text-primary",
+                  )}
+                >
+                  {SubIcon && (
+                    <SubIcon
+                      className={cn(
+                        "h-4 w-4 shrink-0",
+                        isActive ? "text-accent-primary" : "text-text-muted",
+                      )}
+                    />
+                  )}
+                  <span className="tracking-wide">{sub.title}</span>
+                </Button>
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -252,14 +392,26 @@ export function Sidebar() {
 
         <nav className="grid items-start px-3 text-sm font-medium gap-1">
           {items.map((item) => {
+            if (item.submenu) {
+              return (
+                <NavGroup
+                  key={item.title}
+                  item={item}
+                  pathname={pathname}
+                  isSidebarCollapsed={isCollapsed}
+                  setSidebarExpanded={() => setIsCollapsed(false)}
+                />
+              );
+            }
+
             const Icon = item.icon;
             const isActive = pathname === item.href;
             return (
-              <Link key={item.href} href={item.href}>
+              <Link key={item.href || item.title} href={item.href || "#"}>
                 <Button
                   variant="ghost"
                   className={cn(
-                    "w-full justify-start gap-3 rounded-button h-10 transition-colors shadow-none",
+                    "w-full justify-start gap-3 rounded-button h-10 transition-colors shadow-none mt-1",
                     isActive
                       ? "bg-accent-subtle text-accent-primary hover:bg-accent-subtle/80 hover:text-accent-primary"
                       : "text-text-secondary hover:bg-surface-hover hover:text-text-primary",

@@ -1,9 +1,8 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import type { DateRange } from "react-day-picker";
 import {
   DateRangeFilter,
   type Period,
@@ -14,7 +13,6 @@ import {
   TransactionsSummary,
 } from "@/components/transactions/transactions-summary";
 import { TransactionsTable } from "@/components/transactions/transactions-table";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -22,25 +20,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  getClientData,
-  getTransactions,
-  type Transaction,
-} from "@/lib/mock-data";
+import { getTransactions, type Transaction } from "@/lib/mock-data";
 
 export default function TransactionsPage() {
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
   const clientId = params.id as string;
-  const client = getClientData(clientId);
 
   // Initialize state from URL params
   const initialPeriod = (searchParams.get("period") as Period) || "3M";
   const initialCategory = searchParams.get("category") || "all";
   const initialSubcategory = searchParams.get("subcategory") || "all";
 
+  // Main filtering states
   const [period, setPeriod] = useState<Period>(initialPeriod);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [selectedSubcategory, setSelectedSubcategory] =
     useState(initialSubcategory);
@@ -75,9 +70,6 @@ export default function TransactionsPage() {
     const cutoffDate = new Date();
 
     switch (period) {
-      case "1W":
-        cutoffDate.setDate(now.getDate() - 7);
-        break;
       case "1M":
         cutoffDate.setMonth(now.getMonth() - 1);
         break;
@@ -151,15 +143,6 @@ export default function TransactionsPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <Link href={`/dashboard/clients/${clientId}/analysis`}>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-9 w-9 rounded-card text-text-muted hover:text-text-primary hover:bg-surface-hover"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-          </Link>
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-text-primary">
               Transações
@@ -170,7 +153,12 @@ export default function TransactionsPage() {
           </div>
         </div>
 
-        <DateRangeFilter selected={period} onSelect={setPeriod} />
+        <DateRangeFilter
+          selected={period}
+          onSelect={setPeriod}
+          dateRange={dateRange}
+          onDateRangeChange={setDateRange}
+        />
       </div>
 
       {/* Summary Cards (Clickable Filters) */}
@@ -179,9 +167,6 @@ export default function TransactionsPage() {
           const now = new Date();
           const cutoffDate = new Date();
           switch (period) {
-            case "1W":
-              cutoffDate.setDate(now.getDate() - 7);
-              break;
             case "1M":
               cutoffDate.setMonth(now.getMonth() - 1);
               break;
@@ -203,7 +188,7 @@ export default function TransactionsPage() {
       />
 
       {/* Category Filters */}
-      <div className="flex gap-3">
+      <div className="flex flex-col sm:flex-row gap-3">
         <Select
           value={selectedCategory}
           onValueChange={(val) => {
@@ -211,7 +196,7 @@ export default function TransactionsPage() {
             setSelectedSubcategory("all");
           }}
         >
-          <SelectTrigger className="w-[200px] border-border-default text-text-primary rounded-button">
+          <SelectTrigger className="w-full sm:w-[200px] border-border-default text-text-primary rounded-button bg-surface-card">
             <SelectValue placeholder="Categoria" />
           </SelectTrigger>
           <SelectContent>
@@ -228,7 +213,7 @@ export default function TransactionsPage() {
           value={selectedSubcategory}
           onValueChange={setSelectedSubcategory}
         >
-          <SelectTrigger className="w-[200px] border-border-default text-text-primary rounded-button">
+          <SelectTrigger className="w-full sm:w-[200px] border-border-default text-text-primary rounded-button bg-surface-card">
             <SelectValue placeholder="Subcategoria" />
           </SelectTrigger>
           <SelectContent>
