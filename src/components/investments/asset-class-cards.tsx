@@ -1,5 +1,5 @@
 import { Building2, Landmark, TrendingUp } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/utils";
 
@@ -13,6 +13,32 @@ interface AssetClassCardsProps {
   onSelect: (type: AssetType) => void;
 }
 
+const ASSET_CONFIG: {
+  type: AssetType;
+  label: string;
+  subtitle: string;
+  icon: React.ComponentType<{ className?: string }>;
+}[] = [
+  {
+    type: "fixed",
+    label: "Renda Fixa",
+    subtitle: "Tesouro, CDBs, Debêntures",
+    icon: Landmark,
+  },
+  {
+    type: "variable",
+    label: "Renda Variável",
+    subtitle: "Ações, ETFs, Opções",
+    icon: TrendingUp,
+  },
+  {
+    type: "reits",
+    label: "Fundos Imobiliários",
+    subtitle: "FIIs",
+    icon: Building2,
+  },
+];
+
 export function AssetClassCards({
   fixedTotal,
   variableTotal,
@@ -20,64 +46,55 @@ export function AssetClassCards({
   selected,
   onSelect,
 }: AssetClassCardsProps) {
+  const totals: Record<AssetType, number> = {
+    fixed: fixedTotal,
+    variable: variableTotal,
+    reits: reitsTotal,
+  };
+
   return (
     <div className="grid gap-4 md:grid-cols-3">
-      <Card
-        className={cn(
-          "cursor-pointer transition-all hover:bg-accent/5",
-          selected === "fixed" && "border-primary ring-1 ring-primary",
-        )}
-        onClick={() => onSelect("fixed")}
-      >
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Renda Fixa</CardTitle>
-          <Landmark className="h-4 w-4 text-blue-500" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{formatCurrency(fixedTotal)}</div>
-          <p className="text-xs text-muted-foreground">
-            Tesouro, CDBs, Debêntures
-          </p>
-        </CardContent>
-      </Card>
+      {ASSET_CONFIG.map(({ type, label, subtitle, icon: Icon }) => {
+        const isActive = selected === type;
 
-      <Card
-        className={cn(
-          "cursor-pointer transition-all hover:bg-accent/5",
-          selected === "variable" && "border-primary ring-1 ring-primary",
-        )}
-        onClick={() => onSelect("variable")}
-      >
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Renda Variável</CardTitle>
-          <TrendingUp className="h-4 w-4 text-emerald-500" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">
-            {formatCurrency(variableTotal)}
-          </div>
-          <p className="text-xs text-muted-foreground">Ações, ETFs, Opções</p>
-        </CardContent>
-      </Card>
-
-      <Card
-        className={cn(
-          "cursor-pointer transition-all hover:bg-accent/5",
-          selected === "reits" && "border-primary ring-1 ring-primary",
-        )}
-        onClick={() => onSelect("reits")}
-      >
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">
-            Fundos Imobiliários
-          </CardTitle>
-          <Building2 className="h-4 w-4 text-indigo-500" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{formatCurrency(reitsTotal)}</div>
-          <p className="text-xs text-muted-foreground">FIIs</p>
-        </CardContent>
-      </Card>
+        return (
+          <Card
+            key={type}
+            className={cn(
+              "cursor-pointer transition-all duration-200",
+              isActive
+                ? "ring-2 ring-accent-primary shadow-hover"
+                : "hover:shadow-hover",
+            )}
+            onClick={() => onSelect(type)}
+          >
+            <CardContent className="pt-5 pb-5">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-medium uppercase tracking-wide text-text-muted">
+                  {label}
+                </span>
+                <div
+                  className={cn(
+                    "flex h-7 w-7 items-center justify-center rounded-card",
+                    isActive ? "bg-accent-subtle" : "bg-surface-page",
+                  )}
+                >
+                  <Icon
+                    className={cn(
+                      "h-3.5 w-3.5",
+                      isActive ? "text-accent-primary" : "text-text-muted",
+                    )}
+                  />
+                </div>
+              </div>
+              <p className="text-2xl font-bold tracking-tight text-text-primary tabular-nums">
+                {formatCurrency(totals[type])}
+              </p>
+              <p className="text-xs text-text-muted mt-1">{subtitle}</p>
+            </CardContent>
+          </Card>
+        );
+      })}
     </div>
   );
 }

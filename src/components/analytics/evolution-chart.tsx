@@ -10,11 +10,11 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/formatters";
 
 interface EvolutionData {
-  name: string; // Period name (e.g. Month)
+  name: string;
   revenue: number;
   expenses: number;
   balance: number;
@@ -27,74 +27,77 @@ interface EvolutionChartProps {
 export function EvolutionChart({ data }: EvolutionChartProps) {
   return (
     <Card className="col-span-3">
-      <CardHeader>
-        <CardTitle>Evolução</CardTitle>
-      </CardHeader>
-      <CardContent className="pl-2">
+      <CardContent className="pt-6">
+        <div className="flex items-center gap-2 mb-5">
+          <h3 className="text-sm font-semibold text-text-primary tracking-tight">
+            Evolução
+          </h3>
+        </div>
         <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={data}
-              margin={{
-                top: 5,
-                right: 30,
-                left: 20,
-                bottom: 5,
-              }}
+              margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
             >
               <CartesianGrid
                 strokeDasharray="3 3"
                 vertical={false}
-                stroke="hsl(var(--border))"
+                stroke="#F4F4F5"
               />
               <XAxis
                 dataKey="name"
-                stroke="hsl(var(--muted-foreground))"
+                stroke="#A1A1AA"
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis
-                stroke="hsl(var(--muted-foreground))"
-                fontSize={12}
+                stroke="#A1A1AA"
+                fontSize={11}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(value) => formatCurrency(value)}
+                width={95}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "hsl(var(--card))",
-                  borderColor: "hsl(var(--border))",
-                  borderRadius: "var(--radius)",
+                  backgroundColor: "#FFFFFF",
+                  borderColor: "#E4E4E7",
+                  borderRadius: "12px",
+                  boxShadow: "0 2px 24px -6px rgba(0,0,0,0.03)",
+                  fontSize: "12px",
                 }}
+                formatter={(value: number | undefined) =>
+                  formatCurrency(value ?? 0)
+                }
               />
-              <Legend />
+              <Legend wrapperStyle={{ fontSize: "12px", color: "#52525B" }} />
               <Line
                 type="monotone"
                 dataKey="revenue"
                 name="Receita"
-                stroke="#10b981" // emerald-500
+                stroke="#10B981"
                 strokeWidth={2}
-                dot={{ fill: "#10b981" }}
-                activeDot={{ r: 6 }}
+                dot={{ fill: "#10B981", r: 3 }}
+                activeDot={{ r: 5, stroke: "#10B981", strokeWidth: 2 }}
               />
               <Line
                 type="monotone"
                 dataKey="expenses"
                 name="Despesas"
-                stroke="#ef4444" // red-500
+                stroke="#EF4444"
                 strokeWidth={2}
-                dot={{ fill: "#ef4444" }}
-                activeDot={{ r: 6 }}
+                dot={{ fill: "#EF4444", r: 3 }}
+                activeDot={{ r: 5, stroke: "#EF4444", strokeWidth: 2 }}
               />
               <Line
                 type="monotone"
                 dataKey="balance"
                 name="Saldo"
-                stroke="#3b82f6" // blue-500
-                strokeWidth={2}
-                dot={{ fill: "#3b82f6" }}
-                activeDot={{ r: 6 }}
+                stroke="#1d63dd"
+                strokeWidth={2.5}
+                dot={{ fill: "#1d63dd", r: 3 }}
+                activeDot={{ r: 6, stroke: "#1d63dd", strokeWidth: 2 }}
               />
             </LineChart>
           </ResponsiveContainer>

@@ -1,25 +1,28 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
-import * as React from "react";
-
+import { LogOut } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export function Header() {
-  const { setTheme, theme } = useTheme();
-
   return (
-    <header className="flex h-14 items-center justify-end border-b bg-background px-6">
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      >
-        <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-        <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-        <span className="sr-only">Toggle theme</span>
-      </Button>
+    <header className="flex h-16 shrink-0 items-center justify-between border-b border-border-default bg-surface-page/80 backdrop-blur-md px-8 sticky top-0 z-50">
+      <div className="flex items-center gap-6">
+        {/* Minimalist context indicator or breadcrumbs could go here in the future if needed, for now we keep it clean */}
+      </div>
+
+      <div className="flex items-center gap-4">
+        <Link href="/">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-text-secondary hover:text-text-primary hover:bg-surface-hover gap-2 shadow-none rounded-button h-9"
+          >
+            <LogOut className="h-4 w-4" />
+            <span className="hidden sm:inline">Sair</span>
+          </Button>
+        </Link>
+      </div>
     </header>
   );
 }
