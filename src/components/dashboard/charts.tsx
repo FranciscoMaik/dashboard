@@ -62,7 +62,7 @@ export function ClientGrowthChart() {
             <Line
               type="monotone"
               dataKey="total"
-              stroke="#8884d8"
+              stroke="#1d63dd"
               strokeWidth={2}
               activeDot={{ r: 8 }}
             />
@@ -88,7 +88,7 @@ export function AssetAllocationChart() {
               cy="50%"
               innerRadius={60}
               outerRadius={80}
-              fill="#8884d8"
+              fill="#1d63dd"
               paddingAngle={5}
               dataKey="value"
             >

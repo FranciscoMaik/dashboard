@@ -5,9 +5,7 @@ import {
   PiggyBank,
   Wallet,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-// import { cn } from "@/lib/utils"; // Unused
+import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/formatters";
 
 interface AnalyticsSummaryProps {
@@ -18,6 +16,55 @@ interface AnalyticsSummaryProps {
   withdrawals: number;
 }
 
+function SummaryCard({
+  label,
+  value,
+  icon: Icon,
+  variant = "neutral",
+}: {
+  label: string;
+  value: string;
+  icon: React.ComponentType<{ className?: string }>;
+  variant?: "positive" | "negative" | "accent" | "neutral";
+}) {
+  const valueColor =
+    variant === "positive"
+      ? "text-status-success"
+      : variant === "negative"
+        ? "text-status-error"
+        : variant === "accent"
+          ? "text-accent-primary"
+          : "text-text-primary";
+
+  const isAccent = variant === "accent";
+
+  return (
+    <Card className={isAccent ? "bg-accent-primary border-none" : ""}>
+      <CardContent className="pt-5 pb-5">
+        <div className="flex items-center justify-between mb-3">
+          <span
+            className={`text-xs font-medium uppercase tracking-wide ${isAccent ? "text-white/70" : "text-text-muted"}`}
+          >
+            {label}
+          </span>
+          <div
+            className={`flex h-7 w-7 items-center justify-center rounded-card ${isAccent ? "bg-white/15" : "bg-surface-page"}`}
+          >
+            <Icon
+              className={`h-3.5 w-3.5 ${isAccent ? "text-white/80" : "text-text-muted"}`}
+            />
+          </div>
+        </div>
+        <p
+          className={`text-xl font-bold tracking-tight tabular-nums ${isAccent ? "text-white" : valueColor}`}
+        >
+          {value}
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function AnalyticsSummary({
   revenues,
   expenses,
@@ -26,66 +73,35 @@ export function AnalyticsSummary({
   withdrawals,
 }: AnalyticsSummaryProps) {
   return (
-    <div className="grid gap-4 md:grid-cols-5">
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Receitas</CardTitle>
-          <ArrowUp className="h-4 w-4 text-emerald-500" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400">
-            +{formatCurrency(revenues)}
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Despesas</CardTitle>
-          <ArrowDown className="h-4 w-4 text-red-500" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-xl font-bold text-red-600 dark:text-red-400">
-            -{formatCurrency(expenses)}
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="bg-primary text-primary-foreground border-none">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium opacity-90">
-            Saldo
-          </CardTitle>
-          <Wallet className="h-4 w-4 opacity-70" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-xl font-bold">{formatCurrency(balance)}</div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Depósitos</CardTitle>
-          <PiggyBank className="h-4 w-4 text-blue-500" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            {formatCurrency(deposits)}
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Saques</CardTitle>
-          <DollarSign className="h-4 w-4 text-orange-500" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-xl font-bold text-orange-600 dark:text-orange-400">
-            -{formatCurrency(withdrawals)}
-          </div>
-        </CardContent>
-      </Card>
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <SummaryCard
+        label="Receitas"
+        value={`+${formatCurrency(revenues)}`}
+        icon={ArrowUp}
+        variant="positive"
+      />
+      <SummaryCard
+        label="Despesas"
+        value={`-${formatCurrency(expenses)}`}
+        icon={ArrowDown}
+        variant="negative"
+      />
+      <SummaryCard
+        label="Saldo"
+        value={formatCurrency(balance)}
+        icon={Wallet}
+        variant="accent"
+      />
+      <SummaryCard
+        label="Depósitos"
+        value={formatCurrency(deposits)}
+        icon={PiggyBank}
+      />
+      <SummaryCard
+        label="Saques"
+        value={`-${formatCurrency(withdrawals)}`}
+        icon={DollarSign}
+      />
     </div>
   );
 }

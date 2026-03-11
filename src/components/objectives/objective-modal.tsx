@@ -1,25 +1,37 @@
 "use client";
 
+import { format, parseISO } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { CalendarIcon, Target } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Calendar } from "@/components/ui/calendar";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import type { Objective, ObjectiveType } from "./objective-card";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import type { Objective } from "./objective-card";
+
+// Utility for formatting numbers precisely like BRL decimal (without the R$ prefix)
+const formatCurrencyInput = (value: number | undefined | null) => {
+  if (value === undefined || value === null) return "";
+  if (value === 0) return "0,00";
+  return new Intl.NumberFormat("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
+};
+
+const parseCurrencyString = (value: string) => {
+  const numericString = value.replace(/\D/g, "");
+  if (!numericString) return 0;
+  return parseInt(numericString, 10) / 100;
+};
 
 interface ObjectiveModalProps {
   isOpen: boolean;
@@ -62,7 +74,7 @@ export function ObjectiveModal({
         iconName: "wealth",
       });
     }
-  }, [objective, isOpen]);
+  }, [objective]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,130 +85,188 @@ export function ObjectiveModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>
-            {isEditing ? "Editar Objetivo" : "Novo Objetivo"}
-          </DialogTitle>
-          <DialogDescription>
-            {isEditing
-              ? "Atualize os detalhes do seu objetivo financeiro."
-              : "Defina um novo objetivo financeiro para acompanhar."}
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Nome
-            </Label>
-            <Input
-              id="name"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              className="col-span-3"
-            />
+      <DialogContent className="sm:max-w-[650px] bg-surface-elevated shadow-float border-none p-6 gap-6">
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent-subtle">
+            <Target className="h-6 w-6 text-accent-primary" />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="type" className="text-right">
-              Tipo
-            </Label>
-            <Select
-              value={formData.type}
-              onValueChange={(val: ObjectiveType) =>
-                setFormData({ ...formData, type: val })
-              }
+          <div className="flex flex-col gap-1">
+            <DialogTitle className="text-xl font-semibold text-text-primary tracking-tight">
+              {isEditing
+                ? "Editar objetivo financeiro"
+                : "Novo objetivo financeiro"}
+            </DialogTitle>
+            <p className="text-[14px] text-text-secondary">
+              {isEditing
+                ? "Atualize os detalhes do seu objetivo financeiro."
+                : "Defina um novo objetivo para acompanhar e planejar suas finanças a longo prazo."}
+            </p>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+            <div className="space-y-2">
+              <Label
+                htmlFor="name"
+                className="text-sm font-semibold text-text-secondary"
+              >
+                Nome do objetivo
+              </Label>
+              <Input
+                id="name"
+                placeholder="Ex: Viagem para o Japão, Carro Novo"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                className="bg-surface-page border-border-default text-text-primary rounded-input focus:border-accent-primary focus:ring-1 focus:ring-accent-primary/20 h-10 w-full font-medium"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label
+                htmlFor="end"
+                className="text-sm font-semibold text-text-secondary"
+              >
+                Data de conquista
+              </Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full h-10 justify-start text-left font-medium bg-surface-page border-border-default text-text-primary rounded-input hover:bg-surface-hover hover:text-text-primary",
+                      !formData.endDate && "text-text-muted",
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {formData.endDate ? (
+                      format(parseISO(formData.endDate), "dd/MM/yyyy", {
+                        locale: ptBR,
+                      })
+                    ) : (
+                      <span>dd/mm/aaaa</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 z-100" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={
+                      formData.endDate ? parseISO(formData.endDate) : undefined
+                    }
+                    onSelect={(date) =>
+                      setFormData({
+                        ...formData,
+                        endDate: date ? date.toISOString() : "",
+                      })
+                    }
+                    initialFocus
+                    locale={ptBR}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="space-y-2">
+              <Label
+                htmlFor="total"
+                className="text-sm font-semibold text-text-secondary"
+              >
+                Valor total
+              </Label>
+              <div className="relative">
+                <span className="absolute left-3 top-2.5 text-text-primary font-medium">
+                  R$
+                </span>
+                <Input
+                  id="total"
+                  type="text"
+                  placeholder="0,00"
+                  value={formatCurrencyInput(formData.totalValue)}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      totalValue: parseCurrencyString(e.target.value),
+                    })
+                  }
+                  className="pl-9 bg-surface-page border-border-default text-text-primary rounded-input focus:border-accent-primary focus:ring-1 focus:ring-accent-primary/20 h-10 w-full font-medium"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label
+                htmlFor="monthly"
+                className="text-sm font-semibold text-text-secondary"
+              >
+                Aporte mensal
+              </Label>
+              <div className="relative">
+                <span className="absolute left-3 top-2.5 text-text-primary font-medium">
+                  R$
+                </span>
+                <Input
+                  id="monthly"
+                  type="text"
+                  placeholder="0,00"
+                  value={formatCurrencyInput(formData.monthlyContribution)}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      monthlyContribution: parseCurrencyString(e.target.value),
+                    })
+                  }
+                  className="pl-9 bg-surface-page border-border-default text-text-primary rounded-input focus:border-accent-primary focus:ring-1 focus:ring-accent-primary/20 h-10 w-full font-medium"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label
+                htmlFor="current"
+                className="text-sm font-semibold text-text-secondary"
+              >
+                Valor guardado
+              </Label>
+              <div className="relative">
+                <span className="absolute left-3 top-2.5 text-text-primary font-medium">
+                  R$
+                </span>
+                <Input
+                  id="current"
+                  type="text"
+                  placeholder="0,00"
+                  value={formatCurrencyInput(formData.currentAmount)}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      currentAmount: parseCurrencyString(e.target.value),
+                    })
+                  }
+                  className="pl-9 bg-surface-page border-border-default text-text-primary rounded-input focus:border-accent-primary focus:ring-1 focus:ring-accent-primary/20 h-10 w-full font-medium"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-5 border-t border-border-subtle flex justify-end gap-3 mt-4">
+            <Button
+              type="button"
+              onClick={onClose}
+              variant="outline"
+              className="rounded-button bg-surface-page border-border-default text-text-primary hover:bg-surface-hover font-semibold tracking-tight shadow-sm h-10 px-5"
             >
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Selecione o tipo" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="short">Curto Prazo</SelectItem>
-                <SelectItem value="medium">Médio Prazo</SelectItem>
-                <SelectItem value="long">Longo Prazo</SelectItem>
-              </SelectContent>
-            </Select>
+              Cancelar
+            </Button>
+            <Button
+              type="submit"
+              className="rounded-button bg-accent-primary hover:bg-accent-hover font-semibold tracking-tight shadow-sm text-white h-10 px-6"
+            >
+              Salvar
+            </Button>
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="start" className="text-right">
-              Início
-            </Label>
-            <Input
-              id="start"
-              type="date"
-              value={formData.startDate}
-              onChange={(e) =>
-                setFormData({ ...formData, startDate: e.target.value })
-              }
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="end" className="text-right">
-              Fim
-            </Label>
-            <Input
-              id="end"
-              type="date"
-              value={formData.endDate}
-              onChange={(e) =>
-                setFormData({ ...formData, endDate: e.target.value })
-              }
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="monthly" className="text-right">
-              Mensal
-            </Label>
-            <Input
-              id="monthly"
-              type="number"
-              value={formData.monthlyContribution}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  monthlyContribution: Number(e.target.value),
-                })
-              }
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="current" className="text-right">
-              Atual
-            </Label>
-            <Input
-              id="current"
-              type="number"
-              value={formData.currentAmount}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  currentAmount: Number(e.target.value),
-                })
-              }
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="total" className="text-right">
-              Total
-            </Label>
-            <Input
-              id="total"
-              type="number"
-              value={formData.totalValue}
-              onChange={(e) =>
-                setFormData({ ...formData, totalValue: Number(e.target.value) })
-              }
-              className="col-span-3"
-            />
-          </div>
-          <DialogFooter>
-            <Button type="submit">Salvar alterações</Button>
-          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

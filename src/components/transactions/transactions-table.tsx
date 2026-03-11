@@ -6,10 +6,11 @@ import {
   Edit2,
   Eye,
   EyeOff,
+  Landmark,
   MoreVertical,
 } from "lucide-react";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,16 +41,27 @@ export function TransactionsTable({
   onEdit,
 }: TransactionsTableProps) {
   return (
-    <div className="rounded-md border bg-card">
+    <Card className="overflow-hidden">
       <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead className="w-[50px]"></TableHead>
-            <TableHead>Transação</TableHead>
-            <TableHead>Categoria</TableHead>
-            <TableHead>Data</TableHead>
-            <TableHead className="text-right">Valor</TableHead>
-            <TableHead className="w-[50px]"></TableHead>
+          <TableRow className="border-b border-border-subtle hover:bg-transparent">
+            <TableHead className="w-[50px] text-text-muted text-xs uppercase tracking-wide" />
+            <TableHead className="text-text-muted text-xs uppercase tracking-wide">
+              Transação
+            </TableHead>
+            <TableHead className="text-text-muted text-xs uppercase tracking-wide">
+              Banco
+            </TableHead>
+            <TableHead className="text-text-muted text-xs uppercase tracking-wide">
+              Categoria
+            </TableHead>
+            <TableHead className="text-text-muted text-xs uppercase tracking-wide">
+              Data
+            </TableHead>
+            <TableHead className="text-right text-text-muted text-xs uppercase tracking-wide">
+              Valor
+            </TableHead>
+            <TableHead className="w-[50px]" />
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -60,58 +72,76 @@ export function TransactionsTable({
             return (
               <TableRow
                 key={transaction.id}
-                className={cn(isIgnored && "opacity-50 bg-muted/50")}
+                className={cn(
+                  "border-b border-border-subtle hover:bg-surface-hover transition-colors",
+                  isIgnored && "opacity-50",
+                )}
               >
-                <TableCell>
+                <TableCell className="py-4">
                   {isExpense ? (
-                    <ArrowDownCircle className="h-5 w-5 text-red-500" />
+                    <ArrowDownCircle className="h-4 w-4 text-status-error" />
                   ) : (
-                    <ArrowUpCircle className="h-5 w-5 text-green-500" />
+                    <ArrowUpCircle className="h-4 w-4 text-status-success" />
                   )}
                 </TableCell>
-                <TableCell>
+                <TableCell className="py-4">
                   <div className="flex flex-col">
                     <span
                       className={cn(
-                        "font-medium",
-                        isIgnored && "line-through text-muted-foreground",
+                        "font-medium text-sm text-text-primary",
+                        isIgnored && "line-through text-text-muted",
                       )}
                     >
                       {transaction.name}
                     </span>
                     {isIgnored && (
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-[10px] text-text-muted uppercase tracking-wide">
                         Desconsiderado
                       </span>
                     )}
                   </div>
                 </TableCell>
-                <TableCell>
-                  <div className="flex flex-col text-sm">
-                    <span>{transaction.category}</span>
-                    <span className="text-xs text-muted-foreground">
+                <TableCell className="py-4">
+                  <div className="flex items-center gap-2">
+                    <Landmark className="h-4 w-4 text-text-muted" />
+                    <span className="text-sm text-text-secondary">
+                      {transaction.bank || "Desconhecido"}
+                    </span>
+                  </div>
+                </TableCell>
+                <TableCell className="py-4">
+                  <div className="flex flex-col">
+                    <span className="text-sm text-text-primary">
+                      {transaction.category}
+                    </span>
+                    <span className="text-xs text-text-muted">
                       {transaction.subcategory}
                     </span>
                   </div>
                 </TableCell>
-                <TableCell className="text-sm">
+                <TableCell className="text-sm text-text-secondary py-4">
                   {formatDate(transaction.date)}
                 </TableCell>
-                <TableCell className="text-right font-medium">
+                <TableCell className="text-right py-4">
                   <span
                     className={cn(
-                      isExpense ? "text-red-500" : "text-green-500",
-                      isIgnored && "text-muted-foreground",
+                      "text-sm font-semibold tabular-nums",
+                      isExpense ? "text-status-error" : "text-status-success",
+                      isIgnored && "text-text-muted",
                     )}
                   >
-                    {isExpense ? "-" : "+"}
+                    {isExpense ? "−" : "+"}
                     {formatCurrency(transaction.amount)}
                   </span>
                 </TableCell>
-                <TableCell>
+                <TableCell className="py-4">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-text-muted hover:text-text-primary"
+                      >
                         <MoreVertical className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -143,6 +173,6 @@ export function TransactionsTable({
           })}
         </TableBody>
       </Table>
-    </div>
+    </Card>
   );
 }
