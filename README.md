@@ -14,6 +14,22 @@ pnpm dev
 bun dev
 ```
 
+## Getting Started with Docker
+
+```bash
+# Start the development server
+docker compose -f docker-compose.dev.yml up --build
+
+# Stop the development server
+docker compose -f docker-compose.dev.yml down
+
+# Start the production server
+docker compose -f docker-compose.yml up --build
+
+# Stop the production server
+docker compose -f docker-compose.yml down
+```
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
