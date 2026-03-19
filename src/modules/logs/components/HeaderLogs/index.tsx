@@ -30,13 +30,6 @@ export default function HeaderLogs() {
             </button>
           ))}
         </div>
-        <Button
-          variant="outline"
-          className="h-10 flex items-center gap-2 bg-white border-border-default rounded-xl px-4 text-text-secondary hover:text-text-primary hover:bg-surface-hover shadow-sm font-semibold text-sm"
-        >
-          <Calendar className="w-4 h-4" />
-          Personalizado
-        </Button>
       </div>
     </div>
   );
