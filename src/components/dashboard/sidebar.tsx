@@ -20,6 +20,7 @@ import {
   User,
   Users,
   Wallet,
+  History,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -65,6 +66,11 @@ const advisorItems: NavItem[] = [
     title: "Auditoria",
     href: "/dashboard/audit",
     icon: ShieldAlert,
+  },
+  {
+    title: "Logs", // Logs
+    href: "/dashboard/logs",
+    icon: History,
   },
 ];
 
